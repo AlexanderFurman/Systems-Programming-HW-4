@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "../utilities.h"
+#include "Exception.h"
 
 typedef int PlayerLevel; /// natural number between 1 to 10
 
@@ -28,10 +29,29 @@ public:
 
     explicit Player(const std::string& name): ///should it be string& or by value?
             m_name(name), m_level(NEW_PLAYER_LEVEL), m_force(NEW_PLAYER_FORCE),
-            m_maxHP(MAX_HP), m_HP(MAX_HP), m_coins(NEW_PLAYER_COINS){}
+            m_maxHP(MAX_HP), m_HP(MAX_HP), m_coins(NEW_PLAYER_COINS)
+    {
+//        if (name.length() > 15)
+//        {
+//            throw InvalidNameException();
+//        }
+//
+//        std::string permittedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+//
+//        for (const char &character : name)
+//        {
+//            if (permittedCharacters.find(character)!= std::string::npos)
+//            {
+//
+//                throw InvalidNameException();
+//            }
+//        }
+
+// I THINK THE STUFF ABOVE SHOULD BE IN MTMCHKIN and not here
+    }
+
+
     ~Player() = default;
-//    Player(const Player& player) = default;
-//    Player& operator=(const Player& player) = default;
 
     /*** setters and getters: ***/
 
