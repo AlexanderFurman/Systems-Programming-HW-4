@@ -35,7 +35,7 @@ void printPlayerDetails(std::ostream &os, const std::string &name, const std::st
 
 /*
  * Prints the details of a general card:
-
+,
  * @param os - The ostream.
  * @param name - The name of the card.
  * @return

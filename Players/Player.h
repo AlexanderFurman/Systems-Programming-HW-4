@@ -7,37 +7,35 @@
 
 #include <string>
 
+#include <iostream>
+
+#include "../utilities.h"
+
 typedef int PlayerLevel; /// natural number between 1 to 10
 
 //Abstract Base Class
 class Player {
 public:
 
+    static const int MAX_HP = 100;
+    static const int MAX_LEVEL = 10;
+    static const int NEW_PLAYER_LEVEL = 1;
     static const int NEW_PLAYER_FORCE = 5;
-    static const int NEW_PLAYER_MAXHP = 100;
-    static const int PLAYER_MAX_LEVEL = 10;
+    static const int NEW_PLAYER_COINS = 10;
+    static const int DOUBLE = 2;
 
 
 
-    explicit Player(const std::string& name, int maxHP=100, int force=5): ///should it be string& or by value?
-            m_name(name), m_level(1), m_force(force),
-            m_maxHP(maxHP), m_HP(maxHP), m_coins(0)
-    {
-        if (maxHP<=0) {
-            m_maxHP = NEW_PLAYER_MAXHP;
-            m_HP = NEW_PLAYER_MAXHP;
-        }
-        if (force<0) {
-            m_force = NEW_PLAYER_FORCE;
-        }
-    }
+    explicit Player(const std::string& name): ///should it be string& or by value?
+            m_name(name), m_level(NEW_PLAYER_LEVEL), m_force(NEW_PLAYER_FORCE),
+            m_maxHP(MAX_HP), m_HP(MAX_HP), m_coins(NEW_PLAYER_COINS){}
     ~Player() = default;
-    Player(const Player& player) = default;
-    Player& operator=(const Player& player) = default;
+//    Player(const Player& player) = default;
+//    Player& operator=(const Player& player) = default;
 
     /*** setters and getters: ***/
 
-    int getAttackStrength() const/// return force+level
+    virtual int getAttackStrength() const
     {
         return m_force+m_level;
     }
@@ -53,8 +51,6 @@ public:
     {
         return m_force;
     }
-
-//    int getMaxHP() const;
 
     int getHP() const
     {
@@ -76,7 +72,7 @@ public:
     }
     void levelUp()
     {
-        if(m_level < PLAYER_MAX_LEVEL) {
+        if(m_level < MAX_LEVEL) {
             m_level++;
         }
     }
@@ -86,7 +82,7 @@ public:
     }
     bool won() const
     {
-        return getLevel() == PLAYER_MAX_LEVEL;
+        return getLevel() == MAX_LEVEL;
     }
     bool pay(int deductedCoins) ///if false - not committing payment.
     {
@@ -100,26 +96,27 @@ public:
         return true;
     }
 
-    //Virtual methods which must be implemented in the derived classes
-    virtual void printInfo() const;
-
-    void addCoins(int addedCoins)
+    virtual void addCoins(int addedCoins)
     {
         m_coins += (addedCoins<=0) ? 0 : addedCoins;
     }
-    void buff(int forceIncrease)
+    virtual void buff(int forceIncrease)
     {
         if(forceIncrease > 0) {
             m_force += forceIncrease;
         }
     }
-    void heal(int addedHP) ///increase HP by addedHP with. total max value of maxHP.
+    virtual void heal(int addedHP) ///increase HP by addedHP with. total max value of maxHP.
     {
         if(addedHP<=0) {
             return;
         }
         m_HP = (m_HP+addedHP>=m_maxHP) ? m_maxHP : m_HP+addedHP;
     }
+
+    virtual std::string getJob() const = 0; //purely virtual
+
+    friend std::ostream & operator << (std::ostream & os, const Player& player);
 
 
 //private:
@@ -130,7 +127,13 @@ protected:
     int m_maxHP; /// int > 0
     int m_HP; /// int in range 0..maxHP
     int m_coins; /// int >= 0
-
 };
+
+std::ostream& operator<<(std::ostream& os, const Player& player)
+{
+    printPlayerDetails(os,player.getName(),player.getJob(),
+                       player.getLevel(), player.getForce(), player.getHP(), player.getCoins());
+    return os;
+}
 
 #endif //HW3_CLION_PLAYER_H
