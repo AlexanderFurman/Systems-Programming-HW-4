@@ -4,24 +4,32 @@
 
 #include "Mtmchkin.h"
 
-Mtmchkin::Mtmchkin(const std::string &fileName)
+
+Mtmchkin::Mtmchkin(const std::string &fileName): m_roundsPlayed(INITIAL_ROUNDS_PLAYED), m_numberOfPlayers(INITIAL_NUMBER_OF_PLAYERS)
 {
+    //  SHOULD THIS BE CAUGHT HERE OR SOMEWHERE ELSE? MAYBE IN MAIN?
     try
     {
         createDeck(fileName);
     }
     catch(const DeckFileNotFound& e)
     {
-//        TODO: complete this
+        std::cout << e.what() << std::endl;
     }
     catch(const DeckFileFormatError& e)
     {
-//        TODO: complete this
+        std::cout << e.what() << std::endl;
     }
     catch(const DeckFileInvalidSize& e)
     {
-//        TODO: complete this
+        std::cout << e.what() << std::endl;
     }
+
+
+
+
+
+
 
 
 
@@ -52,6 +60,7 @@ void Mtmchkin::createDeck(const std::string &fileName)
     Mode cardMode = card;
     std::ifstream file(fileName);
     std::string currentLine;
+    int currentLineCount = 0;
 
     //Check if file does not exist
     if(file.fail())
@@ -63,12 +72,20 @@ void Mtmchkin::createDeck(const std::string &fileName)
     // check if all strings are valid card names
     while(std::getline(file, currentLine))
     {
-        trimString(&currentLine);
-        if (!stringValid(currentLine, cardMode))
+        currentLineCount ++;
+        std::string trimmedString = currentLine;
+        removeSpaces(trimmedString);
+
+        //If there is some newline, we simple move to the next line
+        if (trimmedString == ""){}
+        else if (!stringValid(trimmedString, cardMode))
         {
-            throw DeckFileFormatError(m_cards.size(), currentLine);
+            throw DeckFileFormatError(currentLineCount);
         }
-        createCard(currentLine);
+        else
+        {
+            createCard(trimmedString);
+        }
     }
 
     //Too few cards
@@ -137,5 +154,16 @@ void Mtmchkin::createCard(const std::string &str)
     else //Merchant
     {
         m_cards.push_back(std::unique_ptr<Card>(new Merchant()))
+    }
+}
+
+void Mtmchkin::removeSpaces(std::string &str)
+{
+    for (int i = 0; i < str.length(); i++)
+    {
+        if (str[i] == ' ')
+        {
+            str.erase(i,1);
+        }
     }
 }
