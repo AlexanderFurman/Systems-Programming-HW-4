@@ -9,5 +9,6 @@
 #include <utilities.h>
 
 class InvalidNameException : public std::exception {};
+class InvalidMerchantInput : public std::exception {};
 
 #endif //HW3_CLION_EXCEPTION_H

@@ -9,4 +9,8 @@ add_executable(Systems-Programming-HW-4
         Mtmchkin.h
         test.cpp
         utilities.cpp
-        utilities.h)
+        utilities.h
+        Cards/Card.cpp
+        Cards/Card.h
+
+        Cards/Treasure.h Cards/Treasure.cpp Cards/Merchant.cpp Cards/Merchant.h Cards/Mana.cpp Cards/Mana.h Cards/Barfight.cpp Cards/Barfight.h Cards/Well.cpp Cards/Well.h)
