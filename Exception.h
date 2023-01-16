@@ -6,9 +6,45 @@
 #define HW3_CLION_EXCEPTION_H
 
 #include <exception>
-#include <utilities.h>
+#include <string>
 
 class InvalidNameException : public std::exception {};
-class InvalidMerchantInput : public std::exception {};
+
+class DeckFileNotFound : public std::exception
+{
+public:
+    const char * what () const throw () override
+    {
+        return "Deck File Error: File not found";
+    }
+};
+
+class DeckFileFormatError : public std::exception
+{
+private:
+    std::string m_msg;
+
+public:
+    explicit DeckFileFormatError(const int &lineError)
+    {
+        m_msg = "Deck File Error: File format error in line " + std::to_string(lineError);
+    };
+
+    const char * what () const throw () override
+    {
+    return m_msg.c_str();
+    }
+};
+
+class DeckFileInvalidSize : public std::exception
+{
+public:
+    const char * what () const throw ()
+    {
+        return "Deck File Error: Deck size is invalid";
+    }
+
+};
 
 #endif //HW3_CLION_EXCEPTION_H
+

@@ -1,9 +1,32 @@
 #ifndef MTMCHKIN_H_
 #define MTMCHKIN_H_
 
+#include <string>
+#include <queue>
+#include "Players/Player.h"
+#include <vector>
+#include <list>
+#include <string>
+#include <fstream>
+#include <iostream>
+#include <memory>
+
 class Mtmchkin{
 
 public:
+
+    const int MIN_PLAYERS = 2;
+    const int MAX_PLAYERS = 6;
+    const int INITIAL_ROUNDS_PLAYED = 0;
+    const int MIN_CARDS_ALLOWED = 5;
+
+    const std::string permittedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    const std::list<std::string> cardTypes{"Witch", "Gremlin", "Dragon", "Mana", "Barfight", "Well", "Treasure", "Merchant"};
+    const std::list<std::string> playerTypes{"Healer", "Ninja", "Warrior"};
+    enum Mode {player, card};
+
+//    enum CardType {Witch, Gremlin, Dragon, Mana, Barfight, Well, Treasure, Merchant};
     
     /*
     * C'tor of Mtmchkin class
@@ -46,6 +69,22 @@ public:
     *          int - number of rounds played
     */
     int getNumberOfRounds() const;
+
+    void createDeck(const std::string &fileName); // check for all types of errors in the file, and throws them
+    bool stringValid(const std::string &str, const enum Mode &mode);
+
+    void createCard(const std::string &str);
+
+
+
+
+
+
+private:
+    std::queue<std::unique_ptr<Player>> m_players;
+    std::vector<std::unique_ptr<<Card>>> m_cards;
+    int m_roundsPlayed;
+    int m_numberOfPlayers;
 };
 
 
