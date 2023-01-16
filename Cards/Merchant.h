@@ -20,8 +20,7 @@ public:
 
     static const int USER_INPUT_SIZE = 1;
 
-
-    explicit Merchant(const std::string& name);
+    Merchant();
     void applyEncounter(Player* curPlayer) const override;
 
     ~Merchant() override = default;

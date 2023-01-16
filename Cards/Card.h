@@ -24,16 +24,9 @@ enum class AllowedCards {Gremlin, Witch, Dragon, Merchant, Treasure, Well, Barfi
 
 class Card {
 public:
-    /*
-     * C'tor of Card class
-     *
-     * @param name - The name of the card.
-     * @return
-     *      A new instance of Card.
-    */
-    explicit Card(const std::string& name);
 
-    const std::string& getName() const;
+
+    virtual const std::string& getName() const = 0;
 
     /*
      * Handling the player's applyEncounter with the card:
@@ -44,7 +37,9 @@ public:
     */
     virtual void applyEncounter(Player* curPlayer) const = 0; ///omer 16.1: const method?
 
+    virtual std::ostream& virtualPrintCard(std::ostream& os) const {};
 
+    friend std::ostream& operator<<(std::ostream& os, const Card* card);
 
 
 //    /*
@@ -70,11 +65,22 @@ public:
     Card(const Card&) = delete; ///???
     Card& operator=(const Card& other) = delete; ///???
 
-
-private:
+protected:
+    /*
+ * C'tor of Card class
+ *
+ * @param name - The name of the card.
+ * @return
+ *      A new instance of Card.
+*/
+    Card(const std::string& name);
     std::string m_name;
 
+private:
+
 };
+
+
 
 
 #endif //EX4_Card_H

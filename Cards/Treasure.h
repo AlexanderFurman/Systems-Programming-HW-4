@@ -11,7 +11,7 @@ class Treasure : public Card
 {
 public:
     static const int TREASURE_COINS = 10;
-    explicit Treasure(const std::string& name);
+    Treasure();
     void applyEncounter(Player* curPlayer) const override;
 
     ~Treasure() override = default;

@@ -6,7 +6,7 @@
 #include "Players/Ninja.h"
 
 
-Well::Well(const std::string& name) : Card(name) {}
+Well::Well() : Card("Well") {}
 
 //omer 16.1: do we need to specifically address case of dead player?
 void Well::applyEncounter(Player* curPlayer) const

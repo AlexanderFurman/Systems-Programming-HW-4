@@ -12,9 +12,10 @@ class Barfight : public Card{
 public:
     static const int BARFIGHT_LOSE_HP = 10;
 
-    explicit Barfight(const std::string& name);
+    Barfight();
     void applyEncounter(Player* curPlayer) const override;
 
+    std::ostream& virtualPrintCard(std::ostream& os) const override;
 
     ~Barfight() override = default;
     Barfight(const Barfight&) = delete; ///???

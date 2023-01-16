@@ -6,7 +6,7 @@
 #include "Players/Warrior.h"
 
 
-Barfight::Barfight(const std::string& name) : Card(name) {}
+Barfight::Barfight() : Card("Barfight") {}
 
 //omer 16.1: do we need to specifically address case of dead player?
 void Barfight::applyEncounter(Player* curPlayer) const
@@ -15,5 +15,10 @@ void Barfight::applyEncounter(Player* curPlayer) const
     if(!isWarrior) {
         curPlayer->damage(BARFIGHT_LOSE_HP);
     }
-    printManaMessage(isWarrior);
+    printBarfightMessage(isWarrior);
+}
+
+std::ostream& Card::virtualPrintCard(std::ostream& os) const
+{
+    printCardDetails(os,m_name);
 }

@@ -6,7 +6,7 @@
 #include "Players/Healer.h"
 
 
-Mana::Mana(const std::string& name) : Card(name) {}
+Mana::Mana() : Card("Mana") {}
 
 void Mana::applyEncounter(Player* curPlayer) const
 {
