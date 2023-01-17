@@ -28,11 +28,6 @@ Mtmchkin::Mtmchkin(const std::string &fileName): m_roundsPlayed(INITIAL_ROUNDS_P
 
 
 
-
-
-
-
-
 }
 
 void Mtmchkin::playRound()
