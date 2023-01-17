@@ -12,7 +12,7 @@ class Well : public Card{
 public:
     static const int WELL_LOSE_HP = 10;
 
-    explicit Well(const std::string& name);
+    Well();
     void applyEncounter(Player* curPlayer) const override;
 
     ~Well() override = default;

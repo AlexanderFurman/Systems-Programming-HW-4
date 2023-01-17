@@ -4,7 +4,7 @@
 
 #include "Treasure.h"
 
-Treasure::Treasure(const std::string& name) : Card(name) {}
+Treasure::Treasure() : Card("Treasure") {}
 
 void Treasure::applyEncounter(Player* curPlayer) const
 {

@@ -114,6 +114,12 @@ public:
         }
         m_HP = (m_HP+addedHP>=m_maxHP) ? m_maxHP : m_HP+addedHP;
     }
+    void decForce() ///added by omer - 16.1
+    {
+        if(m_force>0) {
+            m_force--;
+        }
+    }
 
     virtual std::string getJob() const = 0; //purely virtual
 

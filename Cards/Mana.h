@@ -12,9 +12,8 @@ class Mana : public Card {
 public:
     static const int GAIN_HP = 10;
 
-    explicit Mana(const std::string& name);
+    Mana();
     void applyEncounter(Player* curPlayer) const override;
-
 
     ~Mana() override = default;
     Mana(const Mana&) = delete; ///???

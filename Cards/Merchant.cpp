@@ -11,7 +11,7 @@ static int validateMerchantUserInput();
 
 
 /*** Merchant functions: ***/
-Merchant::Merchant(const std::string& name) : Card(name){}
+Merchant::Merchant() : Card("Merchant"){}
 
 //omer 16/1: how do we make sure if he has enough coins? specific func? exception?
 void Merchant::applyEncounter(Player* curPlayer) const
