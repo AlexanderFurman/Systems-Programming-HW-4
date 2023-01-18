@@ -9,6 +9,10 @@
 #include <string>
 
 class InvalidNameException : public std::exception {};
+class InvalidUserPlayerName : public std::exception {};
+class InvalidUserPlayerClass : public std::exception {};
+class EmptyUserPlayerLine : public std::exception {};
+
 
 class DeckFileNotFound : public std::exception
 {

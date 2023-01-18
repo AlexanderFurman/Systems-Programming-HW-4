@@ -30,8 +30,10 @@ public:
     const int INITIAL_NUMBER_OF_PLAYERS = 0;
     const int MIN_CARDS_ALLOWED = 5;
 
+    ///omer 18.1: we can figure with ascii codes: if( (c>='a' && c<='z') || (c>='A' && c<='Z') )
     const std::string permittedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+    ///omer 18.1: static consts?
     const std::list<std::string> cardTypes{"Witch", "Gremlin", "Dragon", "Mana", "Barfight", "Well", "Treasure", "Merchant"};
     const std::list<std::string> playerTypes{"Healer", "Ninja", "Warrior"};
     enum Mode {player, card};
@@ -86,7 +88,9 @@ public:
 
 
 private:
-    std::queue<std::unique_ptr<Player>> m_players;
+    ///omer 18.1: how do we implement using queue? we can't push players out.
+    ///omer 18.1: how do we implement curPlayer is pointer to player?.
+    std::vector<std::shared_ptr<Player>> m_players; ///omer 18.1: queue->vector, unique->shared
     std::vector<std::unique_ptr<Card>> m_cards;
     int m_roundsPlayed;
     int m_numberOfPlayers;
@@ -96,6 +100,18 @@ private:
     bool stringValid(const std::string &str, const enum Mode &mode);
     void createCard(const std::string &str);
     void removeSpaces(std::string &str);
+    ///18.1 omer added:
+    void enterValidUserPlayerLine();
+    void createPlayer(const std::string &playerName, const std::string &playerClass);
+    int checkUserPlayerName(const std::string& name);
+    int checkUserPlayerClass(const std::string& name);
+    void checkUserInputLine(std::string& userLine,std::string& userName,std::string& userClass)
+    std::string removeStringDuplicateSpaces(const std::string& userLine);
+
+
+
+
+
 };
 
 
