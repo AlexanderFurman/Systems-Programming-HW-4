@@ -6,7 +6,7 @@
 #include "Merchant.h"
 
 /*** static functions: ***/
-static bool checkSufficientMoney(const Player* player, int cost);
+static bool checkSufficientMoney(const std::unique_ptr<Player>& curPlayer, int cost);
 static int validateMerchantUserInput();
 
 
@@ -14,7 +14,7 @@ static int validateMerchantUserInput();
 Merchant::Merchant() : Card("Merchant"){}
 
 //omer 16/1: how do we make sure if he has enough coins? specific func? exception?
-void Merchant::applyEncounter(Player* curPlayer) const
+void Merchant::applyEncounter(const std::unique_ptr<Player>& curPlayer) const
 {
     printMerchantInitialMessageForInteractiveEncounter(std::cout,curPlayer->getName(),curPlayer->getCoins());
     int userNum = validateMerchantUserInput();
@@ -33,7 +33,7 @@ void Merchant::applyEncounter(Player* curPlayer) const
     }
 }
 
-static bool checkSufficientMoney(const Player* player, int cost)
+static bool checkSufficientMoney(const std::unique_ptr<Player>& player, int cost)
 {
     int playerCoins = player->getCoins();
     assert(playerCoins>=0 && cost>0);

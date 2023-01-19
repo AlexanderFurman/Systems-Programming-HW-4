@@ -13,7 +13,7 @@ public:
     static const int WELL_LOSE_HP = 10;
 
     Well();
-    void applyEncounter(Player* curPlayer) const override;
+    void applyEncounter(const std::unique_ptr<Player>& curPlayer) const override;
 
     ~Well() override = default;
     Well(const Well&) = delete; ///???

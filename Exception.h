@@ -26,10 +26,11 @@ public:
 class DeckFileFormatError : public std::exception
 {
 private:
+    const int m_lineError;
     std::string m_msg;
 
 public:
-    explicit DeckFileFormatError(const int &lineError)
+    explicit DeckFileFormatError(const int &lineError) : m_lineError(lineError)
     {
         m_msg = "Deck File Error: File format error in line " + std::to_string(lineError);
     };

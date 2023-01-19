@@ -12,7 +12,7 @@ class Treasure : public Card
 public:
     static const int TREASURE_COINS = 10;
     Treasure();
-    void applyEncounter(Player* curPlayer) const override;
+    void applyEncounter(const std::unique_ptr<Player>& curPlayer) const override;
 
     ~Treasure() override = default;
     Treasure(const Treasure&) = delete; ///???

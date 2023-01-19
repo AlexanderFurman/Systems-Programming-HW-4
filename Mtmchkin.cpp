@@ -4,6 +4,10 @@
 
 #include "Mtmchkin.h"
 #include "Exception.h"
+#include "Players/Player.h"
+#include "Players/Ninja.h"
+#include "Players/Healer.h"
+#include "Players/Warrior.h"
 
 /**
  * omer 18.1 - general notes:
@@ -21,28 +25,51 @@ static int countWordsAndRemoveDuplicateSpaces(std::string &str);
 /*** Mtmchkin methods ***/
 
 Mtmchkin::Mtmchkin(const std::string &fileName): m_roundsPlayed(INITIAL_ROUNDS_PLAYED), m_numberOfPlayers(INITIAL_NUMBER_OF_PLAYERS),
-m_currentIndex(INITIAL_INDEX)
+                                                 m_currentCardIndex(INITIAL_INDEX), m_currentPlayerIndex(INITIAL_INDEX)
 {
-    //  SHOULD THIS BE CAUGHT HERE OR SOMEWHERE ELSE? MAYBE IN MAIN?
-    try
+    createDeck(fileName);
+    m_numberOfPlayers = takeNumOfPlayers();
+    for(int i=0; i<m_numberOfPlayers; i++)
     {
-        createDeck(fileName);
+        enterValidUserPlayerLine();
     }
-    catch(const DeckFileNotFound& e)
-    {
-        std::cout << e.what() << std::endl;
-    }
-    catch(const DeckFileFormatError& e)
-    {
-        std::cout << e.what() << std::endl;
-    }
-    catch(const DeckFileInvalidSize& e)
-    {
-        std::cout << e.what() << std::endl;
-    }
-    ///omer 18.1: resume - add get team size + prints..
-    ///omer 18.1: need to add - add player func. using while and: enterValidUserPlayerLine()
 }
+
+/// SHOULD THIS BE CAUGHT HERE OR SOMEWHERE ELSE? MAYBE IN MAIN? = for main later on.. :
+//try {
+//createDeck(fileName);
+//}
+//catch(const DeckFileNotFound& e) {
+//std::cout << e.what() << std::endl;
+////throw DeckFileNotFound();
+//}
+//catch(const DeckFileFormatError& e) {
+//std::cout << e.what() << std::endl;
+////throw DeckFileFormatError();
+//}
+//catch(const DeckFileInvalidSize& e) {
+//std::cout << e.what() << std::endl;
+////throw DeckFileInvalidSize();
+//}
+
+int Mtmchkin::takeNumOfPlayers()
+{
+    printEnterTeamSizeMessage();
+    char enteredSize[USER_TEAM_NUM_CHARS];
+    int userNum;
+    while (true)
+    {
+        std::cin.getline(enteredSize,sizeof(enteredSize));
+        userNum = std::stoi(enteredSize);
+        if(userNum < MIN_PLAYERS || userNum > MAX_PLAYERS)
+        {
+            printInvalidTeamSize();
+            continue;
+        }
+        return userNum;
+    }
+}
+
 
 void Mtmchkin::playRound()
 {
@@ -77,7 +104,7 @@ void Mtmchkin::playRound()
         if (m_players[i]->isPlaying())
         {
             printTurnStartMessage(m_players[i]->getName());
-            m_cards[m_currentIndex]->applyEncounter(m_players[i]);
+            m_cards[m_currentCardIndex]->applyEncounter(m_players[i]);
 
             if (m_players[i]->won())
             {
@@ -122,14 +149,12 @@ void Mtmchkin::updateActivePlayers(const int &currentIndex)
 
 void Mtmchkin::printLeaderBoard() const
 {
-
     printLeaderBoardStartMessage();
     for (const int playerIndex : m_winners)
     {
-        printPlayerLeaderBoard(playerIndex, *(m_players[playerIndex].get()));
-
+        Player& myPlayer = *((m_players[playerIndex]).get());
+        printPlayerLeaderBoard(playerIndex, myPlayer);
     }
-
 }
 
 bool Mtmchkin::isGameOver() const
@@ -151,13 +176,13 @@ int Mtmchkin::getNumberOfRounds() const
 
 void Mtmchkin::incrementIndex()
 {
-    if (m_currentIndex < (m_cards.size() - 1))
+    if (m_currentCardIndex < (m_cards.size() - 1))
     {
-        m_currentIndex ++;
+        m_currentCardIndex ++;
     }
     else
     {
-        m_currentIndex = 0;
+        m_currentCardIndex = 0;
     }
 }
 
@@ -183,7 +208,7 @@ void Mtmchkin::createDeck(const std::string &fileName)
         removeSpaces(trimmedString); ///omer 18.1: why to remove spaces? a line like: "Ma na" is legal? also what about newline? didn't understand. --> You are correct - I changed the code
 
         //If there is some newline, we simple move to the next line
-        if (trimmedString == ""){}
+        if (trimmedString.empty()){}
         else if (!stringValid(trimmedString, card))
         {
             throw DeckFileFormatError(currentLineCount); ///omer 18.1: currentLineCount used here
@@ -231,7 +256,7 @@ bool Mtmchkin::stringValid(const std::string &str, const Mode &mode)
                 }
             }
         return true;
-//    }
+    }
 }
 
 
@@ -272,6 +297,22 @@ void Mtmchkin::createCard(const std::string &str)
     }
 }
 
+void Mtmchkin::createPlayer(const std::string &userName, const std::string &userClass)
+{
+    std::string playerName = userName;
+    std::string playerClass = userClass;
+    if(userName==HEALER_STRING) { //Healer
+        m_players.push_back(std::unique_ptr<Player>(new Healer(playerName)));
+    }
+    if(userName==NINJA_STRING) { //Ninja
+        m_players.push_back(std::unique_ptr<Player>(new Ninja(playerName)));
+    }
+    if(userName==WARRIOR_STRING) { //Warrior
+        m_players.push_back(std::unique_ptr<Player>(new Warrior(playerName)));
+    }
+}
+
+
 void Mtmchkin::removeSpaces(std::string &str)
 {
 //    for (int i = 0; i < str.length(); i++)
@@ -303,8 +344,8 @@ void Mtmchkin::enterValidUserPlayerLine()
     printInsertPlayerMessage();
     while(true)
     {
-        std::string userName = "";
-        std::string userClass = "";
+        std::string userName;
+        std::string userClass;
         std::string userLine;
         std::cin >> userLine;
         try {
@@ -396,17 +437,35 @@ int Mtmchkin::checkUserPlayerName(const std::string& name)
     if(len>15 || len < 1 || !(Mtmchkin::stringValid(name,player))) {
         return false;
     }
-    for(std::shared_ptr<Player> p : m_players )
+    for(std::unique_ptr<Player>& player : m_players)
     {
-        if(p== nullptr) { //omer 18.1: if enters here - no more players in vector yet
-            break;
-        }
-        if (name == p->getName()) {
+//        if(m_players[i] == nullptr) { //omer 18.1: if enters here - no more players in vector yet
+//            break;
+//        }
+        if (name == player->getName()) {
             return false;
         }
     }
     return true;
 }
+
+//int Mtmchkin::checkUserPlayerName(const std::string& name)
+//{
+//    int len = name.length();
+//    if(len>15 || len < 1 || !(Mtmchkin::stringValid(name,player))) {
+//        return false;
+//    }
+//    for(int i = 0; i<m_players.size(); i++ )
+//    {
+//        if(m_players[i] == nullptr) { //omer 18.1: if enters here - no more players in vector yet
+//            break;
+//        }
+//        if (name == m_players[i]->getName()) {
+//            return false;
+//        }
+//    }
+//    return true;
+//}
 
 int Mtmchkin::checkUserPlayerClass(const std::string& name)
 {

@@ -21,7 +21,7 @@ public:
     static const int USER_INPUT_SIZE = 1;
 
     Merchant();
-    void applyEncounter(Player* curPlayer) const override;
+    void applyEncounter(const std::unique_ptr<Player>& curPlayer) const override;
 
     ~Merchant() override = default;
     Merchant(const Merchant&) = delete; ///???

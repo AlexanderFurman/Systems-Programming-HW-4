@@ -9,7 +9,7 @@
 Battle::Battle(const std::string& name, int force, int loot, int playerHPDamage) :
                Card(name), m_force(force), m_loot(loot), m_playerHPDamage(playerHPDamage) {}
 
-void Battle::applyEncounter(Player *curPlayer) const
+void Battle::applyEncounter(const std::unique_ptr<Player>& curPlayer) const
 {
     if (curPlayer->getAttackStrength()>=m_force) //if player won:
     {

@@ -13,7 +13,7 @@ public:
     static const int GAIN_HP = 10;
 
     Mana();
-    void applyEncounter(Player* curPlayer) const override;
+    void applyEncounter(const std::unique_ptr<Player>& curPlayer) const override;
 
     ~Mana() override = default;
     Mana(const Mana&) = delete; ///???

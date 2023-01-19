@@ -9,10 +9,10 @@
 
 class Battle : public Card {
 public:
-    void applyEncounter(Player *curPlayer) const override;
+    void applyEncounter(const std::unique_ptr<Player>& curPlayer) const override;
     //void applyWin(Player *curPlayer) const; //not virtual
     //void applyLoss(Player *curPlayer) const; //not virtual
-    virtual void applyMonsterEffect(Player *curPlayer) const = 0;
+    virtual void applyMonsterEffect(const std::unique_ptr<Player>& curPlayer) const = 0;
 
     std::ostream& virtualPrintCard(std::ostream& os) const override;
 

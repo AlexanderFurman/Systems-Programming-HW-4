@@ -16,7 +16,7 @@ public:
 
     Witch();
 
-    void applyMonsterEffect(Player *curPlayer) const override;
+    void applyMonsterEffect(const std::unique_ptr<Player>& curPlayer) const override;
 
     ~Witch() override = default;
     Witch(const Witch&) = delete; ///???

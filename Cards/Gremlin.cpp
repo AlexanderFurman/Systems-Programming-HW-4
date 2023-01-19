@@ -4,7 +4,7 @@
 
 #include "Gremlin.h"
 
-void Gremlin::applyMonsterEffect(Player *curPlayer) const {}
+void Gremlin::applyMonsterEffect(const std::unique_ptr<Player>& curPlayer) const {}
 
 Gremlin::Gremlin() : Battle("Gremlin", FORCE, LOOT, PLAYER_HP_DAMAGE) {}
 

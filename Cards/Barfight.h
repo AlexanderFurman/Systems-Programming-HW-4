@@ -13,7 +13,7 @@ public:
     static const int BARFIGHT_LOSE_HP = 10;
 
     Barfight();
-    void applyEncounter(Player* curPlayer) const override;
+    void applyEncounter(const std::unique_ptr<Player>& curPlayer) const override;
 
     std::ostream& virtualPrintCard(std::ostream& os) const override;
 

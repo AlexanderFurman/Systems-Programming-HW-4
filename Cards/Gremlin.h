@@ -16,7 +16,7 @@ public:
 
     Gremlin();
 
-    void applyMonsterEffect(Player *curPlayer) const override;
+    void applyMonsterEffect(const std::unique_ptr<Player>& curPlayer) const override;
 
     ~Gremlin() override = default;
     Gremlin(const Gremlin&) = delete; ///???

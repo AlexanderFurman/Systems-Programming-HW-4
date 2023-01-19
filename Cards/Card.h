@@ -35,11 +35,11 @@ public:
      * @return
      *      void
     */
-    virtual void applyEncounter(Player* curPlayer) const = 0; ///omer 16.1: const method?
+    virtual void applyEncounter(const std::unique_ptr<Player>& curPlayer) const = 0; ///omer 16.1: const method?
 
     virtual std::ostream& virtualPrintCard(std::ostream& os) const {};
 
-    friend std::ostream& operator<<(std::ostream& os, const Card* card);
+    friend std::ostream& operator<<(std::ostream& os, const std::unique_ptr<Card>& card);
 
 
 //    /*

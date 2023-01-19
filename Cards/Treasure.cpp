@@ -6,7 +6,7 @@
 
 Treasure::Treasure() : Card("Treasure") {}
 
-void Treasure::applyEncounter(Player* curPlayer) const
+void Treasure::applyEncounter(const std::unique_ptr<Player>& curPlayer) const
 {
     curPlayer->addCoins(TREASURE_COINS);
     printTreasureMessage();

@@ -13,7 +13,6 @@
 #include "Exception.h"
 
 
-//Abstract Base Class
 class Player {
 public:
 
@@ -23,8 +22,6 @@ public:
     static const int NEW_PLAYER_FORCE = 5;
     static const int NEW_PLAYER_COINS = 10;
     static const int DOUBLE = 2;
-
-    typedef int PlayerLevel;
 
 
     explicit Player(const std::string& name);///should it be string& or by value?

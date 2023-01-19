@@ -9,9 +9,9 @@
 Barfight::Barfight() : Card("Barfight") {}
 
 //omer 16.1: do we need to specifically address case of dead player?
-void Barfight::applyEncounter(Player* curPlayer) const
+void Barfight::applyEncounter(const std::unique_ptr<Player>& curPlayer) const
 {
-    bool isWarrior =  dynamic_cast<const Warrior*>(curPlayer)== nullptr;
+    bool isWarrior =  dynamic_cast<const Warrior*>(curPlayer.get())== nullptr;
     if(!isWarrior) {
         curPlayer->damage(BARFIGHT_LOSE_HP);
     }

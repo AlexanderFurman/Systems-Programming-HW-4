@@ -16,7 +16,7 @@ public:
 
     Dragon();
 
-    void applyMonsterEffect(Player *curPlayer) const override;
+    void applyMonsterEffect(const std::unique_ptr<Player>& curPlayer) const override;
 
     ~Dragon() override = default;
     Dragon(const Dragon&) = delete; ///???

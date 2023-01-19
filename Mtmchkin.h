@@ -24,20 +24,8 @@ class Mtmchkin{
 
 public:
 
-    const int MIN_PLAYERS = 2;
-    const int MAX_PLAYERS = 6;
-    const int INITIAL_ROUNDS_PLAYED = 0;
-    const int INITIAL_NUMBER_OF_PLAYERS = 0;
-    const int MIN_CARDS_ALLOWED = 5;
-    const int INITIAL_INDEX = 0;
 
-    ///omer 18.1: we can figure with ascii codes: if( (c>='a' && c<='z') || (c>='A' && c<='Z') )
-    const std::string permittedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    ///omer 18.1: static consts?
-    const std::list<std::string> cardTypes{"Witch", "Gremlin", "Dragon", "Mana", "Barfight", "Well", "Treasure", "Merchant"};
-    const std::list<std::string> playerTypes{"Healer", "Ninja", "Warrior"};
-    enum Mode {player, card};
 
 //    enum CardType {Witch, Gremlin, Dragon, Mana, Barfight, Well, Treasure, Merchant};
     
@@ -85,17 +73,32 @@ public:
 
 
 
-
-
-
 private:
-    ///omer 18.1: how do we implement using queue? we can't push players out.
-    ///omer 18.1: how do we implement curPlayer is pointer to player?.
+    static const int INITIAL_ROUNDS_PLAYED = 0;
+    static const int INITIAL_NUMBER_OF_PLAYERS = 0;
+    static const int MIN_CARDS_ALLOWED = 5;
+    static const int INITIAL_INDEX = 0;
+    ///omer 18.1: we can figure with ascii codes: if( (c>='a' && c<='z') || (c>='A' && c<='Z') )
+    const std::string permittedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    ///omer 18.1: static consts?
+    const std::vector<std::string> playerTypes{"Healer", "Ninja", "Warrior"};
+    const std::string HEALER_STRING = "Healer";
+    const std::string NINJA_STRING = "Ninja";
+    const std::string WARRIOR_STRING = "Warrior";
+    const std::vector<std::string> cardTypes{"Witch", "Gremlin", "Dragon", "Mana", "Barfight", "Well", "Treasure", "Merchant"};
+    enum Mode {player, card};
+    static const int USER_TEAM_NUM_CHARS = 1;
+    static const int MIN_PLAYERS = 2;
+    static const int MAX_PLAYERS = 6;
+
+    /** private members **/
+    //omer 18.1: how do we implement using queue? we can't push players out.
+    //omer 18.1: how do we implement curPlayer is pointer to player?.
     std::vector<std::unique_ptr<Player>> m_players; ///omer 18.1: queue->vector, unique->shared --why does it need to be shared here? -- also, should be queue
     std::vector<std::unique_ptr<Card>> m_cards;
     int m_roundsPlayed;
     int m_numberOfPlayers;
-    int m_currentIndex;
+    int m_currentCardIndex;
     int m_currentPlayerIndex;
     std::vector<int> m_winners;
     std::vector<int> m_losers;
@@ -111,8 +114,9 @@ private:
     void createPlayer(const std::string &playerName, const std::string &playerClass);
     int checkUserPlayerName(const std::string& name);
     int checkUserPlayerClass(const std::string& name);
-    void checkUserInputLine(std::string& userLine,std::string& userName,std::string& userClass)
+    void checkUserInputLine(std::string& userLine,std::string& userName,std::string& userClass);
     std::string removeStringDuplicateSpaces(const std::string& userLine);
+    int takeNumOfPlayers();
 
     ///19.1 alex added:
     void incrementIndex();
