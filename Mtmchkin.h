@@ -13,7 +13,6 @@
 #include "Cards/Merchant.h"
 #include "Cards/Well.h"
 #include "Cards/Treasure.h"
-#include "LeaderBoard.h"
 #include <vector>
 #include <list>
 #include <string>
@@ -97,7 +96,10 @@ private:
     int m_roundsPlayed;
     int m_numberOfPlayers;
     int m_currentIndex;
-    LeaderBoard m_leaderBoard;
+    int m_currentPlayerIndex;
+    std::vector<int> m_winners;
+    std::vector<int> m_losers;
+    std::vector<int> m_activePlayers;
 
     //internal use functions
     void createDeck(const std::string &fileName); // check for all types of errors in the file, and throws them
@@ -114,7 +116,7 @@ private:
 
     ///19.1 alex added:
     void incrementIndex();
-
+    void updateActivePlayers(const int &currentIndex);
 
 
 

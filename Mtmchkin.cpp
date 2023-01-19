@@ -46,35 +46,90 @@ m_currentIndex(INITIAL_INDEX)
 
 void Mtmchkin::playRound()
 {
-    printRoundStartMessage(m_roundsPlayed+1);
+//    printRoundStartMessage(m_roundsPlayed+1);
 //    for (const std::shared_ptr<Player>& player : m_players)
+//    for (int i = 0; i < m_players.size(); i++)
+//    {
+//        std::shared_ptr<Player>& player = m_players.front();
+//        m_players.erase(m_players.begin());
+//        printTurnStartMessage(player->getName());
+//        m_cards[m_currentIndex]->applyEncounter(player.get()); /// There is an issue here since the function takes a pointer -- can it accept unique/shared ptrs?
+//        incrementIndex();
+//
+//        if (player->isPlaying())
+//        {
+//            m_players.push_back(player);
+//        }
+//        else if (player->won())
+//        {
+//            m_leaderBoard.addWinner(player.get());
+//        }
+//        else
+//        {
+//            m_leaderBoard.addLoser(player.get());
+//        }
+//
+//    }
+//    m_roundsPlayed++;
+    printRoundStartMessage(m_roundsPlayed+1);
     for (int i = 0; i < m_players.size(); i++)
     {
-        std::shared_ptr<Player>& player = m_players.front();
-        m_players.erase(m_players.begin());
-        printTurnStartMessage(player->getName());
-        m_cards[m_currentIndex]->applyEncounter(player.get()); /// There is an issue here since the function takes a pointer -- can it accept unique/shared ptrs?
-        incrementIndex();
+        if (m_players[i]->isPlaying())
+        {
+            printTurnStartMessage(m_players[i]->getName());
+            m_cards[m_currentIndex]->applyEncounter(m_players[i]);
 
-        if (!player->isPlaying())
-        {
-            m_players.push_back(player);
+            if (m_players[i]->won())
+            {
+                m_winners.push_back(i);
+            }
+            else if (m_players[i]->isKnockedOut())
+            {
+                m_losers.insert(m_losers.begin(), i);
+            }
         }
-        else if (player->won())
-        {
-            m_leaderBoard.addWinner(player.get());
-        }
-        else
-        {
-            m_leaderBoard.addLoser(player.get());
-        }
-
+        updateActivePlayers(i);
     }
-    m_roundsPlayed++;
+
+
 }
+
+void Mtmchkin::updateActivePlayers(const int &currentIndex)
+{
+    std::vector<int> activePlayers = {};
+    if (currentIndex < m_players.size() - 1)
+    {
+        for(int i=currentIndex+1; i < m_players.size(); i++)
+        {
+            if (m_players[i]->isPlaying())
+            {
+                activePlayers.push_back(i);
+            }
+        }
+    }
+    for (int i=0; i <= currentIndex; i++)
+    {
+        if (m_players[i]->isPlaying())
+        {
+            activePlayers.push_back(i);
+        }
+    }
+    m_activePlayers = activePlayers;
+}
+
 
 void Mtmchkin::printLeaderBoard() const
 {
+    std::vector<int> leaderBoard = {};
+    leaderBoard.insert(leaderBoard.end(), m_winners.begin(), m_winners.end());
+    leaderBoard.insert(leaderBoard.end(), m_activePlayers.begin(), m_activePlayers.end());
+    leaderBoard.insert(leaderBoard.end(), m_losers.begin(), m_losers.end());
+
+    for (const int &playerIndex : leaderBoard)
+    {
+        printLeaderBoardStartMessage();
+
+    }
 
 }
 

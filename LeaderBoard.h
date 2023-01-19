@@ -12,8 +12,8 @@
 class LeaderBoard
 {
 private:
-    std::vector<std::shared_ptr<Player>> m_winners;
-    std::vector<std::shared_ptr<Player>> m_losers;
+    std::vector<int> m_winners;
+    std::vector<int> m_losers;
     std::vector<std::shared_ptr<Player>> m_players;
 
 public:
@@ -31,3 +31,4 @@ public:
 
 
 #endif //HW3_CLION_LEADERBOARD_H
+
