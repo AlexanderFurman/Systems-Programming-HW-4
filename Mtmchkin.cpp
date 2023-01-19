@@ -118,15 +118,13 @@ void Mtmchkin::updateActivePlayers(const int &currentIndex)
 }
 
 
+
+
 void Mtmchkin::printLeaderBoard() const
 {
-    std::vector<int> leaderBoard = {};
-    leaderBoard.insert(leaderBoard.end(), m_winners.begin(), m_winners.end());
-    leaderBoard.insert(leaderBoard.end(), m_activePlayers.begin(), m_activePlayers.end());
-    leaderBoard.insert(leaderBoard.end(), m_losers.begin(), m_losers.end());
 
     printLeaderBoardStartMessage();
-    for (int playerIndex : leaderBoard)
+    for (const int playerIndex : m_winners)
     {
         printPlayerLeaderBoard(playerIndex, *(m_players[playerIndex].get()));
 
