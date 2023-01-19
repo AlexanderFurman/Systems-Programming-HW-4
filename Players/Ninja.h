@@ -10,18 +10,18 @@
 class Ninja : public Player
 {
 public:
-    explicit Ninja(const std::string& name): Player(name) {}
+    explicit Ninja(const std::string& name); //: Player(name) {}
 
-    void addCoins(int addedCoins) override
-    {
-        m_coins += DOUBLE*addedCoins;
-//        m_coins += (addedCoins<=0) ? 0 : 2*addedCoins;
-    }
+    void addCoins(int addedCoins) override;
+//    {
+//        m_coins += DOUBLE*addedCoins;
+////        m_coins += (addedCoins<=0) ? 0 : 2*addedCoins;
+//    }
 
-    std::string getJob() const override
-    {
-        return "Ninja";
-    }
+    std::string getJob() const override;
+//    {
+//        return "Ninja";
+//    }
 
 };
 

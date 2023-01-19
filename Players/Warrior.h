@@ -10,17 +10,17 @@
 class Warrior : public Player
 {
 public:
-    explicit Warrior(const std::string& name): Player(name){}
+    explicit Warrior(const std::string& name); //: Player(name){}
 
-    int getAttackStrength() const override
-    {
-        return DOUBLE*m_force+m_level;
-    }
+    int getAttackStrength() const override;
+//    {
+//        return DOUBLE*m_force+m_level;
+//    }
 
-    std::string getJob() const override
-    {
-        return "Warrior";
-    }
+    std::string getJob() const override;
+//    {
+//        return "Warrior";
+//    }
 };
 
 #endif //HW3_CLION_WARRIOR_H
