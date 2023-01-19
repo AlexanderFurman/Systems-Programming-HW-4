@@ -13,6 +13,7 @@
 #include "Cards/Merchant.h"
 #include "Cards/Well.h"
 #include "Cards/Treasure.h"
+#include "LeaderBoard.h"
 #include <vector>
 #include <list>
 #include <string>
@@ -29,6 +30,7 @@ public:
     const int INITIAL_ROUNDS_PLAYED = 0;
     const int INITIAL_NUMBER_OF_PLAYERS = 0;
     const int MIN_CARDS_ALLOWED = 5;
+    const int INITIAL_INDEX = 0;
 
     ///omer 18.1: we can figure with ascii codes: if( (c>='a' && c<='z') || (c>='A' && c<='Z') )
     const std::string permittedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -90,10 +92,12 @@ public:
 private:
     ///omer 18.1: how do we implement using queue? we can't push players out.
     ///omer 18.1: how do we implement curPlayer is pointer to player?.
-    std::vector<std::shared_ptr<Player>> m_players; ///omer 18.1: queue->vector, unique->shared
+    std::vector<std::shared_ptr<Player>> m_players; ///omer 18.1: queue->vector, unique->shared --why does it need to be shared here? -- also, should be queue
     std::vector<std::unique_ptr<Card>> m_cards;
     int m_roundsPlayed;
     int m_numberOfPlayers;
+    int m_currentIndex;
+    LeaderBoard m_leaderBoard;
 
     //internal use functions
     void createDeck(const std::string &fileName); // check for all types of errors in the file, and throws them
@@ -107,6 +111,9 @@ private:
     int checkUserPlayerClass(const std::string& name);
     void checkUserInputLine(std::string& userLine,std::string& userName,std::string& userClass)
     std::string removeStringDuplicateSpaces(const std::string& userLine);
+
+    ///19.1 alex added:
+    void incrementIndex();
 
 
 

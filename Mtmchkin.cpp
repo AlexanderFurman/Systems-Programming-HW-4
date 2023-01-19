@@ -20,7 +20,8 @@ static int countWordsAndRemoveDuplicateSpaces(std::string &str);
 
 /*** Mtmchkin methods ***/
 
-Mtmchkin::Mtmchkin(const std::string &fileName): m_roundsPlayed(INITIAL_ROUNDS_PLAYED), m_numberOfPlayers(INITIAL_NUMBER_OF_PLAYERS)
+Mtmchkin::Mtmchkin(const std::string &fileName): m_roundsPlayed(INITIAL_ROUNDS_PLAYED), m_numberOfPlayers(INITIAL_NUMBER_OF_PLAYERS),
+m_currentIndex(INITIAL_INDEX)
 {
     //  SHOULD THIS BE CAUGHT HERE OR SOMEWHERE ELSE? MAYBE IN MAIN?
     try
@@ -45,7 +46,19 @@ Mtmchkin::Mtmchkin(const std::string &fileName): m_roundsPlayed(INITIAL_ROUNDS_P
 
 void Mtmchkin::playRound()
 {
+    printRoundStartMessage(m_roundsPlayed+1);
+    for (const std::shared_ptr<Player>& player : m_players)
+    {
+        if (player->isPlaying())
+        {
+            printTurnStartMessage(player->getName());
+            m_cards[m_currentIndex]->applyEncounter(player.get()); /// There is an issue here since the function takes a pointer -- can it accept unique/shared ptrs?
+            incrementIndex();
+        }
 
+    }
+    m_leaderBoard.update()
+    m_roundsPlayed++;
 }
 
 void Mtmchkin::printLeaderBoard() const
@@ -55,12 +68,31 @@ void Mtmchkin::printLeaderBoard() const
 
 bool Mtmchkin::isGameOver() const
 {
+    for (const std::shared_ptr<Player>& player : m_players)
+    {
+        if (player->isPlaying())
+        {
+            return false;
+        }
+    }
 
 }
 
 int Mtmchkin::getNumberOfRounds() const
 {
     return m_roundsPlayed;
+}
+
+void Mtmchkin::incrementIndex()
+{
+    if (m_currentIndex < (m_cards.size() - 1))
+    {
+        m_currentIndex ++;
+    }
+    else
+    {
+        m_currentIndex = 0;
+    }
 }
 
 void Mtmchkin::createDeck(const std::string &fileName)
@@ -80,13 +112,13 @@ void Mtmchkin::createDeck(const std::string &fileName)
     // check if all strings are valid card names
     while(std::getline(file, currentLine))
     {
-        currentLineCount ++; ///omer 18.1: should it be in start? or end of func? (start from 1 or 0?)
+        currentLineCount ++; ///omer 18.1: should it be in start? or end of func? (start from 1 or 0?) --> We start from line 1, no line 0 so I think it should be 1
         std::string trimmedString = currentLine;
-        removeSpaces(trimmedString); ///omer 18.1: why to remove spaces? a line like: "Ma na" is legal? also what about newline? didn't understand.
+        removeSpaces(trimmedString); ///omer 18.1: why to remove spaces? a line like: "Ma na" is legal? also what about newline? didn't understand. --> You are correct - I changed the code
 
         //If there is some newline, we simple move to the next line
         if (trimmedString == ""){}
-        else if (!stringValid(trimmedString, cardMode))
+        else if (!stringValid(trimmedString, card))
         {
             throw DeckFileFormatError(currentLineCount); ///omer 18.1: currentLineCount used here
         }
@@ -103,8 +135,10 @@ void Mtmchkin::createDeck(const std::string &fileName)
     }
 }
 
-///omer 18.1 - check length<=15?
-bool Mtmchkin::stringValid(const std::string &str, const enum Mode &mode)
+///omer 18.1 - check length<=15? --> you are right, I am changing the code
+///alex 19.1 - mode enum not necessary - I am removing it -- > should I add to check PlayerType is also valid here?
+//bool Mtmchkin::stringValid(const std::string &str, const enum Mode &mode)
+bool Mtmchkin::stringValid(const std::string &str, const Mode &mode)
 {
     switch(mode)
     {
@@ -125,9 +159,13 @@ bool Mtmchkin::stringValid(const std::string &str, const enum Mode &mode)
                 {
                     return false;
                 }
+                if (str.length() > 15)
+                {
+                    return false;
+                }
             }
-            return true;
-    }
+        return true;
+//    }
 }
 
 
@@ -170,11 +208,24 @@ void Mtmchkin::createCard(const std::string &str)
 
 void Mtmchkin::removeSpaces(std::string &str)
 {
-    for (int i = 0; i < str.length(); i++)
+//    for (int i = 0; i < str.length(); i++)
+//    {
+//        if (str[i] == ' ')
+//        {
+//            str.erase(i,1);
+//        }
+//    }
+
+    // removes white spaces at beginning and end of line
+    while (str.length() > 0)
     {
-        if (str[i] == ' ')
+        if(str[0] == ' ')
         {
-            str.erase(i,1);
+            str.erase(0,1);
+        }
+        if(str[str.length()-1] == ' ')
+        {
+            str.erase(str.length()-1,1);
         }
     }
 }

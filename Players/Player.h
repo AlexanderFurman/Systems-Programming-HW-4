@@ -121,6 +121,11 @@ public:
         }
     }
 
+    bool isPlaying() const
+    {
+        return (!won() && !isKnockedOut());
+    }
+
     virtual std::string getJob() const = 0; //purely virtual
 
     friend std::ostream & operator << (std::ostream & os, const Player& player);
