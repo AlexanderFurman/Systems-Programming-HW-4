@@ -47,17 +47,29 @@ m_currentIndex(INITIAL_INDEX)
 void Mtmchkin::playRound()
 {
     printRoundStartMessage(m_roundsPlayed+1);
-    for (const std::shared_ptr<Player>& player : m_players)
+//    for (const std::shared_ptr<Player>& player : m_players)
+    for (int i = 0; i < m_players.size(); i++)
     {
-        if (player->isPlaying())
+        std::shared_ptr<Player>& player = m_players.front();
+        m_players.erase(m_players.begin());
+        printTurnStartMessage(player->getName());
+        m_cards[m_currentIndex]->applyEncounter(player.get()); /// There is an issue here since the function takes a pointer -- can it accept unique/shared ptrs?
+        incrementIndex();
+
+        if (!player->isPlaying())
         {
-            printTurnStartMessage(player->getName());
-            m_cards[m_currentIndex]->applyEncounter(player.get()); /// There is an issue here since the function takes a pointer -- can it accept unique/shared ptrs?
-            incrementIndex();
+            m_players.push_back(player);
+        }
+        else if (player->won())
+        {
+            m_leaderBoard.addWinner(player.get());
+        }
+        else
+        {
+            m_leaderBoard.addLoser(player.get());
         }
 
     }
-    m_leaderBoard.update()
     m_roundsPlayed++;
 }
 
