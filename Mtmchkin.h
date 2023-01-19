@@ -91,7 +91,7 @@ public:
 private:
     ///omer 18.1: how do we implement using queue? we can't push players out.
     ///omer 18.1: how do we implement curPlayer is pointer to player?.
-    std::vector<std::shared_ptr<Player>> m_players; ///omer 18.1: queue->vector, unique->shared --why does it need to be shared here? -- also, should be queue
+    std::vector<std::unique_ptr<Player>> m_players; ///omer 18.1: queue->vector, unique->shared --why does it need to be shared here? -- also, should be queue
     std::vector<std::unique_ptr<Card>> m_cards;
     int m_roundsPlayed;
     int m_numberOfPlayers;

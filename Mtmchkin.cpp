@@ -125,9 +125,10 @@ void Mtmchkin::printLeaderBoard() const
     leaderBoard.insert(leaderBoard.end(), m_activePlayers.begin(), m_activePlayers.end());
     leaderBoard.insert(leaderBoard.end(), m_losers.begin(), m_losers.end());
 
-    for (const int &playerIndex : leaderBoard)
+    printLeaderBoardStartMessage();
+    for (int playerIndex : leaderBoard)
     {
-        printLeaderBoardStartMessage();
+        printPlayerLeaderBoard(playerIndex, *(m_players[playerIndex].get()));
 
     }
 
@@ -135,7 +136,7 @@ void Mtmchkin::printLeaderBoard() const
 
 bool Mtmchkin::isGameOver() const
 {
-    for (const std::shared_ptr<Player>& player : m_players)
+    for (const std::unique_ptr<Player>& player : m_players)
     {
         if (player->isPlaying())
         {
