@@ -15,7 +15,7 @@ public:
     Barfight();
     void applyEncounter(const std::unique_ptr<Player>& curPlayer) const override;
 
-    std::ostream& virtualPrintCard(std::ostream& os) const override;
+    //std::ostream& virtualPrintCard(std::ostream& os) const override;
 
     ~Barfight() override = default;
     Barfight(const Barfight&) = delete; ///???
