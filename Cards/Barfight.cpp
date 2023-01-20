@@ -18,7 +18,7 @@ void Barfight::applyEncounter(const std::unique_ptr<Player>& curPlayer) const
     printBarfightMessage(isWarrior);
 }
 
-std::ostream& Card::virtualPrintCard(std::ostream& os) const
-{
-    printCardDetails(os,m_name);
-}
+//std::ostream& Card::virtualPrintCard(std::ostream& os) const
+//{
+//    printCardDetails(os,m_name);
+//}

@@ -1,6 +1,5 @@
 #include "Card.h"
 
-#include "CardStats.h"
 
 ///omer 14/1: where do we check correct name? - exceptions?
 Card::Card(const std::string& name): m_name(name) {}
@@ -13,7 +12,7 @@ Card::Card(const std::string& name): m_name(name) {}
 std::ostream& operator<<(std::ostream& os, const std::unique_ptr<Card>& card)
 {
     printCardDetails(os, card->m_name);
-    card->virtualPrintCard(os);
+    card->virtualPrintAddedDetails(os);
     printEndOfCardDetails(os);
     return os;
 }

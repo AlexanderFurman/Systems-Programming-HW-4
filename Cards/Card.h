@@ -8,7 +8,6 @@
 #include "../Players/Player.h"
 #include "../utilities.h"
 #include "Exception.h"
-#include "CardStats.h"
 
 ///*
 // *  CardType:
@@ -20,7 +19,7 @@
 // *  Barfight - current player loses 10 HP unless he's a Warrior.
 // *  Mana - if current player is a Healer, Increase HP by 10 points - which means 20 for Healer (no more than maxHP points).
 //*/
-enum class AllowedCards {Gremlin, Witch, Dragon, Merchant, Treasure, Well, Barfight, Mana}; // The type of the Card
+//enum class AllowedCards {Gremlin, Witch, Dragon, Merchant, Treasure, Well, Barfight, Mana}; // The type of the Card
 
 class Card {
 public:
@@ -37,7 +36,7 @@ public:
     */
     virtual void applyEncounter(const std::unique_ptr<Player>& curPlayer) const = 0; ///omer 16.1: const method?
 
-    virtual std::ostream& virtualPrintCard(std::ostream& os) const {};
+    virtual std::ostream& virtualPrintAddedDetails(std::ostream& os) const {} ;
 
     friend std::ostream& operator<<(std::ostream& os, const std::unique_ptr<Card>& card);
 
@@ -73,7 +72,7 @@ protected:
  * @return
  *      A new instance of Card.
 */
-    Card(const std::string& name);
+    explicit Card(const std::string& name);
     std::string m_name;
 
 private:

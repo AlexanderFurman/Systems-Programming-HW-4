@@ -14,7 +14,7 @@ public:
     //void applyLoss(Player *curPlayer) const; //not virtual
     virtual void applyMonsterEffect(const std::unique_ptr<Player>& curPlayer) const = 0;
 
-    std::ostream& virtualPrintCard(std::ostream& os) const override;
+    std::ostream& virtualPrintAddedDetails(std::ostream& os) const override;
 
 
     ~Battle() override = default;
