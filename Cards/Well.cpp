@@ -15,5 +15,5 @@ void Well::applyEncounter(const std::unique_ptr<Player>& curPlayer) const
     if(!isNinja) {
         curPlayer->damage(WELL_LOSE_HP);
     }
-    printManaMessage(isNinja);
+    printWellMessage(isNinja);
 }

@@ -20,6 +20,8 @@ public:
 //    }
 
     std::string getJob() const override;
+    ~Healer() override = default;
+
 //    {
 //        return "Healer";
 //    }

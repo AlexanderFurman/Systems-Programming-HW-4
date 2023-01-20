@@ -25,7 +25,7 @@ void Battle::applyEncounter(const std::unique_ptr<Player>& curPlayer) const
     }
 }
 
-std::ostream& Battle::virtualPrintAddedDetails(std::ostream& os) const
+void Battle::virtualPrintAddedDetails(std::ostream& os) const
 {
     printMonsterDetails(os, m_force, m_playerHPDamage, m_loot, dynamic_cast<const Dragon*>(this));
 }

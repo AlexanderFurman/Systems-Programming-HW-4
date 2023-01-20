@@ -99,27 +99,28 @@ private:
     int m_roundsPlayed;
     int m_numberOfPlayers;
     int m_currentCardIndex;
-    int m_currentPlayerIndex;
+    //int m_currentPlayerIndex;
     std::vector<int> m_winners;
     std::vector<int> m_losers;
     std::vector<int> m_activePlayers;
 
     //internal use functions
     void createDeck(const std::string &fileName); // check for all types of errors in the file, and throws them
-    bool stringValid(const std::string &str, const enum Mode &mode);
+    bool cardStringValid(const std::string &str) const;
+    bool playerStringValid(const std::string &str) const;
     void createCard(const std::string &str);
-    void removeSpaces(std::string &str);
+    //void removeSpaces(std::string &str);
     ///18.1 omer added:
     void enterValidUserPlayerLine();
-    void createPlayer(const std::string &playerName, const std::string &playerClass);
-    int checkUserPlayerName(const std::string& name);
-    int checkUserPlayerClass(const std::string& name);
+    void createPlayer(const std::string& playerName, const std::string &playerClass);
+    int checkUserPlayerName(const std::string& name) const;
+    int checkUserPlayerClass(const std::string& name) const;
     void checkUserInputLine(std::string& userLine,std::string& userName,std::string& userClass);
-    std::string removeStringDuplicateSpaces(const std::string& userLine);
+    //std::string removeStringDuplicateSpaces(const std::string& userLine);
     int takeNumOfPlayers();
 
     ///19.1 alex added:
-    void incrementIndex();
+    //void incrementIndex();
     void updateActivePlayers(const int &currentIndex);
 
 

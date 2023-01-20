@@ -18,6 +18,8 @@ public:
 //    }
 
     std::string getJob() const override;
+    ~Warrior() override = default;
+
 //    {
 //        return "Warrior";
 //    }

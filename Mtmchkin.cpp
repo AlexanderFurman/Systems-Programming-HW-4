@@ -4,6 +4,7 @@
 
 #include "Mtmchkin.h"
 #include "Exception.h"
+#include "utilities.h"
 #include "Players/Player.h"
 #include "Players/Ninja.h"
 #include "Players/Healer.h"
@@ -25,8 +26,9 @@ static int countWordsAndRemoveDuplicateSpaces(std::string &str);
 /*** Mtmchkin methods ***/
 
 Mtmchkin::Mtmchkin(const std::string &fileName): m_roundsPlayed(INITIAL_ROUNDS_PLAYED), m_numberOfPlayers(INITIAL_NUMBER_OF_PLAYERS),
-                                                 m_currentCardIndex(INITIAL_INDEX), m_currentPlayerIndex(INITIAL_INDEX)
+                                                 m_currentCardIndex(INITIAL_INDEX)
 {
+    printStartGameMessage();
     createDeck(fileName);
     m_numberOfPlayers = takeNumOfPlayers();
     for(int i=0; i<m_numberOfPlayers; i++)
@@ -55,12 +57,13 @@ Mtmchkin::Mtmchkin(const std::string &fileName): m_roundsPlayed(INITIAL_ROUNDS_P
 int Mtmchkin::takeNumOfPlayers()
 {
     printEnterTeamSizeMessage();
-    char enteredSize[USER_TEAM_NUM_CHARS];
+    //char enteredSize[USER_TEAM_NUM_CHARS];
+    std::string userStr;
     int userNum;
     while (true)
     {
-        std::cin.getline(enteredSize,sizeof(enteredSize));
-        userNum = std::stoi(enteredSize);
+        std::getline(std::cin,userStr);
+        userNum = std::stoi(userStr);
         if(userNum < MIN_PLAYERS || userNum > MAX_PLAYERS)
         {
             printInvalidTeamSize();
@@ -117,8 +120,9 @@ void Mtmchkin::playRound()
         }
         updateActivePlayers(i);
     }
-
-
+    if(isGameOver()) { ///need to stop running game (play round) from main
+        printGameEndMessage();
+    }
 }
 
 void Mtmchkin::updateActivePlayers(const int &currentIndex)
@@ -145,16 +149,19 @@ void Mtmchkin::updateActivePlayers(const int &currentIndex)
 }
 
 
-
-
 void Mtmchkin::printLeaderBoard() const
 {
+    std::vector<int> leaderBoard = {};
+    leaderBoard.insert(leaderBoard.end(), m_winners.begin(), m_winners.end());
+    leaderBoard.insert(leaderBoard.end(), m_activePlayers.begin(), m_activePlayers.end());
+    leaderBoard.insert(leaderBoard.end(), m_losers.begin(), m_losers.end());
+
     printLeaderBoardStartMessage();
-    for (const int playerIndex : m_winners)
+    for (int i = 0; i<m_numberOfPlayers; i++)
     {
-        Player& myPlayer = *((m_players[playerIndex]).get());
-        printPlayerLeaderBoard(playerIndex, myPlayer);
+        printPlayerLeaderBoard(i+1, *(m_players[leaderBoard.at(i)].get()));
     }
+
 }
 
 bool Mtmchkin::isGameOver() const
@@ -166,7 +173,7 @@ bool Mtmchkin::isGameOver() const
             return false;
         }
     }
-
+    return true;
 }
 
 int Mtmchkin::getNumberOfRounds() const
@@ -174,21 +181,21 @@ int Mtmchkin::getNumberOfRounds() const
     return m_roundsPlayed;
 }
 
-void Mtmchkin::incrementIndex()
-{
-    if (m_currentCardIndex < (m_cards.size() - 1))
-    {
-        m_currentCardIndex ++;
-    }
-    else
-    {
-        m_currentCardIndex = 0;
-    }
-}
+//void Mtmchkin::incrementIndex()
+//{
+//    if (m_currentCardIndex < (m_cards.size() - 1))
+//    {
+//        m_currentCardIndex ++;
+//    }
+//    else
+//    {
+//        m_currentCardIndex = 0;
+//    }
+//}
 
 void Mtmchkin::createDeck(const std::string &fileName)
 {
-    Mode cardMode = card;
+    //Mode cardMode = card;
     std::ifstream file(fileName);
     std::string currentLine;
     int currentLineCount = 0;
@@ -205,11 +212,11 @@ void Mtmchkin::createDeck(const std::string &fileName)
     {
         currentLineCount ++; ///omer 18.1: should it be in start? or end of func? (start from 1 or 0?) --> We start from line 1, no line 0 so I think it should be 1
         std::string trimmedString = currentLine;
-        removeSpaces(trimmedString); ///omer 18.1: why to remove spaces? a line like: "Ma na" is legal? also what about newline? didn't understand. --> You are correct - I changed the code
+        countWordsAndRemoveDuplicateSpaces(trimmedString); ///omer 18.1: why to remove spaces? a line like: "Ma na" is legal? also what about newline? didn't understand. --> You are correct - I changed the code
 
         //If there is some newline, we simple move to the next line
         if (trimmedString.empty()){}
-        else if (!stringValid(trimmedString, card))
+        else if (!cardStringValid(trimmedString))
         {
             throw DeckFileFormatError(currentLineCount); ///omer 18.1: currentLineCount used here
         }
@@ -229,36 +236,34 @@ void Mtmchkin::createDeck(const std::string &fileName)
 ///omer 18.1 - check length<=15? --> you are right, I am changing the code
 ///alex 19.1 - mode enum not necessary - I am removing it -- > should I add to check PlayerType is also valid here?
 //bool Mtmchkin::stringValid(const std::string &str, const enum Mode &mode)
-bool Mtmchkin::stringValid(const std::string &str, const Mode &mode)
+bool Mtmchkin::cardStringValid(const std::string &str) const
 {
-    switch(mode)
+    for(const std::string& card : cardTypes)
     {
-        case card:
-            for(const std::string& card : cardTypes)
-            {
-                if (str == card)
-                {
-                    return true;
-                }
-            }
-            return false;
-
-        case player:
-            for(const char &character : str)
-            {
-                if (permittedCharacters.find(character) == std::string::npos)
-                {
-                    return false;
-                }
-                if (str.length() > 15)
-                {
-                    return false;
-                }
-            }
-        return true;
+        if (str == card)
+        {
+            return true;
+        }
     }
+    return false;
 }
 
+
+bool Mtmchkin::playerStringValid(const std::string &str) const
+{
+        for(const char &character : str)
+        {
+            if (permittedCharacters.find(character) == std::string::npos)
+            {
+                return false;
+            }
+            if (str.length() > 15)
+            {
+                return false;
+            }
+        }
+        return true;
+}
 
 
 void Mtmchkin::createCard(const std::string &str)
@@ -297,45 +302,45 @@ void Mtmchkin::createCard(const std::string &str)
     }
 }
 
-void Mtmchkin::createPlayer(const std::string &userName, const std::string &userClass)
+void Mtmchkin::createPlayer(const std::string& userName, const std::string &userClass)
 {
-    std::string playerName = userName;
-    std::string playerClass = userClass;
-    if(userName==HEALER_STRING) { //Healer
-        m_players.push_back(std::unique_ptr<Player>(new Healer(playerName)));
+    //std::string playerName = userName;
+    //std::string playerClass = userClass;
+    if(userClass==HEALER_STRING) { //Healer
+        m_players.push_back(std::unique_ptr<Player>(new Healer(userName)));
     }
-    if(userName==NINJA_STRING) { //Ninja
-        m_players.push_back(std::unique_ptr<Player>(new Ninja(playerName)));
+    if(userClass==NINJA_STRING) { //Ninja
+        m_players.push_back(std::unique_ptr<Player>(new Ninja(userName)));
     }
-    if(userName==WARRIOR_STRING) { //Warrior
-        m_players.push_back(std::unique_ptr<Player>(new Warrior(playerName)));
+    if(userClass==WARRIOR_STRING) { //Warrior
+        m_players.push_back(std::unique_ptr<Player>(new Warrior(userName)));
     }
 }
 
 
-void Mtmchkin::removeSpaces(std::string &str)
-{
-//    for (int i = 0; i < str.length(); i++)
+//void Mtmchkin::removeSpaces(std::string &str)
+//{
+////    for (int i = 0; i < str.length(); i++)
+////    {
+////        if (str[i] == ' ')
+////        {
+////            str.erase(i,1);
+////        }
+////    }
+//
+//    // removes white spaces at beginning and end of line
+//    while (str.length() > 0)
 //    {
-//        if (str[i] == ' ')
+//        if(str[0] == ' ')
 //        {
-//            str.erase(i,1);
+//            str.erase(0,1);
+//        }
+//        if(str[str.length()-1] == ' ')
+//        {
+//            str.erase(str.length()-1,1);
 //        }
 //    }
-
-    // removes white spaces at beginning and end of line
-    while (str.length() > 0)
-    {
-        if(str[0] == ' ')
-        {
-            str.erase(0,1);
-        }
-        if(str[str.length()-1] == ' ')
-        {
-            str.erase(str.length()-1,1);
-        }
-    }
-}
+//}
 
 /*** static functions implementations ***/
 //check if player exists: just name? or name+character?
@@ -347,7 +352,7 @@ void Mtmchkin::enterValidUserPlayerLine()
         std::string userName;
         std::string userClass;
         std::string userLine;
-        std::cin >> userLine;
+        std::getline(std::cin,userLine);
         try {
             checkUserInputLine(userLine,userName,userClass);
         }
@@ -375,7 +380,7 @@ void Mtmchkin::checkUserInputLine(std::string& userLine,std::string& userName,st
     if(userLine.empty() || !numWords) {
         throw EmptyUserPlayerLine();
     }
-    int separatorIdx = lineCopy.find(' '); //(lineCopy.find(' ')==std::string::npos) ? lineCopy.length() : lineCopy.find(' ');
+    int separatorIdx = int(lineCopy.find(' ')); //(lineCopy.find(' ')==std::string::npos) ? lineCopy.length() : lineCopy.find(' ');
     userName = std::string(lineCopy,0,separatorIdx);
     if(numWords!=2) {
         if(checkUserPlayerName(lineCopy)) {
@@ -431,13 +436,13 @@ void Mtmchkin::checkUserInputLine(std::string& userLine,std::string& userName,st
 // *//
 
 
-int Mtmchkin::checkUserPlayerName(const std::string& name)
+int Mtmchkin::checkUserPlayerName(const std::string& name) const
 {
-    int len = name.length();
-    if(len>15 || len < 1 || !(Mtmchkin::stringValid(name,player))) {
+    int len = int(name.length());
+    if(len>15 || len < 1 || !playerStringValid(name)) {
         return false;
     }
-    for(std::unique_ptr<Player>& player : m_players)
+    for(const std::unique_ptr<Player>& player : m_players)
     {
 //        if(m_players[i] == nullptr) { //omer 18.1: if enters here - no more players in vector yet
 //            break;
@@ -467,19 +472,19 @@ int Mtmchkin::checkUserPlayerName(const std::string& name)
 //    return true;
 //}
 
-int Mtmchkin::checkUserPlayerClass(const std::string& name)
+int Mtmchkin::checkUserPlayerClass(const std::string& name) const
 {
-    for( std::string str : playerTypes )
+    for(const std::string& str : playerTypes )
     {
         if (name == str) {
-            return false;
+            return true;
         }
     }
-    return true;
+    return false;
 }
 
 static int countWordsAndRemoveDuplicateSpaces(std::string &str) {
-    int wordCount;
+    int wordCount = 0;
     int i = 0;
     while (str[i]) {
         if(str[i] == ' ') {

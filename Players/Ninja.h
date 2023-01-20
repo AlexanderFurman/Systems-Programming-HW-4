@@ -19,6 +19,8 @@ public:
 //    }
 
     std::string getJob() const override;
+    ~Ninja() override = default;
+
 //    {
 //        return "Ninja";
 //    }

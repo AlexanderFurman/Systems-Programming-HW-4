@@ -19,14 +19,20 @@ void Merchant::applyEncounter(const std::unique_ptr<Player>& curPlayer) const
     printMerchantInitialMessageForInteractiveEncounter(std::cout,curPlayer->getName(),curPlayer->getCoins());
     int userNum = validateMerchantUserInput();
     if(userNum == ACTION_DO_NOTHING) {
-        printMerchantSummary(std::cout,curPlayer->getName(),userNum,0);
+        printMerchantSummary(std::cout,curPlayer->getName(),ACTION_DO_NOTHING,0);
         return;
     }
     //else - buying HP or Force:
     int cost = (userNum==ACTION_BUY_HP_POTION ? COST_HP : COST_FORCE_BOOST);
     if(checkSufficientMoney(curPlayer,cost)) { // player has enough coins
         curPlayer->pay(cost);
-        printMerchantSummary(std::cout,curPlayer->getName(),userNum,cost);
+        if(userNum==ACTION_BUY_HP_POTION) {
+            curPlayer->heal(ADDED_HP);
+        }
+        else {
+            curPlayer->buff(ADDED_FORCE);
+        }
+        printMerchantSummary(std::cout,curPlayer->getName(),userNum, cost);
     }
     else { //not sufficient coins
         printMerchantInsufficientCoins(std::cout);
@@ -42,11 +48,11 @@ static bool checkSufficientMoney(const std::unique_ptr<Player>& player, int cost
 
 static int validateMerchantUserInput()
 {
-    char userInput[Merchant::USER_INPUT_SIZE];
+    std::string userInput;
     int userNum;
     while (true)
     {
-        std::cin.getline(userInput,sizeof(userInput));
+        std::getline(std::cin,userInput);
         userNum = std::stoi(userInput);
         if(userNum < Merchant::ACTION_DO_NOTHING || userNum > Merchant::ACTION_BUY_FORCE_BOOST)
         {

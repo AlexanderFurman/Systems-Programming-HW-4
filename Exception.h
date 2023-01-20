@@ -8,7 +8,7 @@
 #include <exception>
 #include <string>
 
-class InvalidNameException : public std::exception {};
+//class InvalidNameException : public std::exception {};
 class InvalidUserPlayerName : public std::exception {};
 class InvalidUserPlayerClass : public std::exception {};
 class EmptyUserPlayerLine : public std::exception {};
@@ -26,11 +26,11 @@ public:
 class DeckFileFormatError : public std::exception
 {
 private:
-    const int m_lineError;
+    //const int m_lineError;
     std::string m_msg;
 
 public:
-    explicit DeckFileFormatError(const int &lineError) : m_lineError(lineError)
+    explicit DeckFileFormatError(const int &lineError) // : m_lineError(lineError)
     {
         m_msg = "Deck File Error: File format error in line " + std::to_string(lineError);
     };
@@ -44,7 +44,7 @@ public:
 class DeckFileInvalidSize : public std::exception
 {
 public:
-    const char * what () const throw ()
+    const char * what () const throw () override
     {
         return "Deck File Error: Deck size is invalid";
     }

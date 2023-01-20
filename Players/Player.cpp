@@ -3,10 +3,11 @@
 //
 
 #include "Player.h"
+#include "../utilities.h"
+#include "Exception.h"
 
-Player::Player(const std::string& name): ///should it be string& or by value?
-        m_name(name), m_level(NEW_PLAYER_LEVEL), m_force(NEW_PLAYER_FORCE),
-        m_maxHP(MAX_HP), m_HP(MAX_HP), m_coins(NEW_PLAYER_COINS) {}
+Player::Player(const std::string& name) : m_name(name), m_level(NEW_PLAYER_LEVEL), m_force(NEW_PLAYER_FORCE),
+                                          m_maxHP(MAX_HP), m_HP(MAX_HP), m_coins(NEW_PLAYER_COINS) {}
 
 /*** setters and getters: ***/
 
@@ -16,9 +17,9 @@ int Player::getAttackStrength() const
 }
 const std::string& Player::getName() const
 {
-    return m_name; // This should return *char instead of std__string, in oredr to match with the method printPlayerInfo
+    return m_name; // This should return *char instead of std__string, in order to match with the method printPlayerInfo
 }
-Player::PlayerLevel Player::getLevel() const // required
+int Player::getLevel() const // required
 {
     return m_level;
 }

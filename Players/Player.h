@@ -9,13 +9,12 @@
 
 #include <iostream>
 
-#include "../utilities.h"
-#include "Exception.h"
 
 
-class Player {
+
+class Player
+{
 public:
-
     static const int MAX_HP = 100;
     static const int MAX_LEVEL = 10;
     static const int NEW_PLAYER_LEVEL = 1;
@@ -24,12 +23,12 @@ public:
     static const int DOUBLE = 2;
 
 
-    explicit Player(const std::string& name);///should it be string& or by value?
+    explicit Player(const std::string& name); ///should it be string& or by value?
 //            m_name(name), m_level(NEW_PLAYER_LEVEL), m_force(NEW_PLAYER_FORCE),
 //            m_maxHP(MAX_HP), m_HP(MAX_HP), m_coins(NEW_PLAYER_COINS) {}
 
 
-    ~Player() = default;
+    virtual ~Player() = default;
 
     /*** setters and getters: ***/
 
@@ -39,9 +38,9 @@ public:
 //    }
     const std::string& getName() const;
 //    {
-//        return m_name; // This should return *char instead of std__string, in oredr to match with the method printPlayerInfo
+//        return m_name; // This should return *char instead of std__string, in order to match with the method printPlayerInfo
 //    }
-    PlayerLevel getLevel() const ;// required
+    int getLevel() const ;// required
 //    {
 //        return m_level;
 //    }
@@ -125,18 +124,20 @@ public:
 
     virtual std::string getJob() const = 0; //purely virtual
 
-    friend std::ostream & operator << (std::ostream & os, const Player& player);
+    friend std::ostream& operator<<(std::ostream & os, const Player& player);
 
 
 //private:
 protected:
     std::string m_name; ///english letters (Aa), no spaces.
-    PlayerLevel m_level; /// int in range 1..10
+    int m_level; /// int in range 1..10
     int m_force; /// int >= 0
     int m_maxHP; /// int > 0
     int m_HP; /// int in range 0..maxHP
     int m_coins; /// int >= 0
+
 };
+
 //
 //std::ostream& operator<<(std::ostream& os, const Player& player)
 //{

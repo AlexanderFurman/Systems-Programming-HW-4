@@ -18,6 +18,10 @@ public:
     static const int COST_HP = 5;
     static const int COST_FORCE_BOOST = 10;
 
+    static const int ADDED_HP = 1;
+    static const int ADDED_FORCE = 1;
+
+
     static const int USER_INPUT_SIZE = 1;
 
     Merchant();

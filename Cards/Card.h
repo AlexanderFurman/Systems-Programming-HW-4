@@ -1,5 +1,5 @@
 //
-// Created by Daniel_Meents on 07/04/2022.
+// Created by Omer Meushar on 20/01/2023.
 //
 #ifndef EX4_Card_H
 #define EX4_Card_H
@@ -36,9 +36,9 @@ public:
     */
     virtual void applyEncounter(const std::unique_ptr<Player>& curPlayer) const = 0; ///omer 16.1: const method?
 
-    virtual std::ostream& virtualPrintAddedDetails(std::ostream& os) const {} ;
+    virtual void virtualPrintAddedDetails(std::ostream& os) const;
 
-    friend std::ostream& operator<<(std::ostream& os, const std::unique_ptr<Card>& card);
+    friend std::ostream& operator<<(std::ostream& os, const Card& card);
 
 
 //    /*
