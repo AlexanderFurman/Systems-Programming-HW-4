@@ -1,0 +1,4 @@
+It's the location of build results.
+ The default folders are cmake-build-debug for Debug profiles and cmake-build-release for Release profiles.
+  You can always set  other locations of your choice in the Generation path field of your CMake profile
+  (Settings / Preferences | Build, Execution, Deployment | CMake).

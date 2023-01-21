@@ -63,10 +63,18 @@ int Mtmchkin::takeNumOfPlayers()
     while (true)
     {
         std::getline(std::cin,userStr);
-        userNum = std::stoi(userStr);
+        try { ///updated test3
+            userNum = std::stoi(userStr);
+        }
+        catch(...) {
+            printInvalidTeamSize();
+            printEnterTeamSizeMessage();
+            continue;
+        }
         if(userNum < MIN_PLAYERS || userNum > MAX_PLAYERS)
         {
             printInvalidTeamSize();
+            printEnterTeamSizeMessage();
             continue;
         }
         return userNum;
@@ -102,13 +110,13 @@ void Mtmchkin::playRound()
 //    }
 //    m_roundsPlayed++;
     printRoundStartMessage(m_roundsPlayed+1);
-    for (int i = 0; i < m_players.size(); i++)
+    for (int i = 0; i < int(m_players.size()); i++)
     {
         if (m_players[i]->isPlaying())
         {
             printTurnStartMessage(m_players[i]->getName());
             m_cards[m_currentCardIndex]->applyEncounter(m_players[i]);
-
+            incrementCardIndex();
             if (m_players[i]->won())
             {
                 m_winners.push_back(i);
@@ -120,6 +128,7 @@ void Mtmchkin::playRound()
         }
         updateActivePlayers(i);
     }
+    m_roundsPlayed++;
     if(isGameOver()) { ///need to stop running game (play round) from main
         printGameEndMessage();
     }
@@ -128,9 +137,9 @@ void Mtmchkin::playRound()
 void Mtmchkin::updateActivePlayers(const int &currentIndex)
 {
     std::vector<int> activePlayers = {};
-    if (currentIndex < m_players.size() - 1)
+    if (currentIndex < int(m_players.size()) - 1)
     {
-        for(int i=currentIndex+1; i < m_players.size(); i++)
+        for(int i=currentIndex+1; i < int(m_players.size()); i++)
         {
             if (m_players[i]->isPlaying())
             {
@@ -181,17 +190,17 @@ int Mtmchkin::getNumberOfRounds() const
     return m_roundsPlayed;
 }
 
-//void Mtmchkin::incrementIndex()
-//{
-//    if (m_currentCardIndex < (m_cards.size() - 1))
-//    {
-//        m_currentCardIndex ++;
-//    }
-//    else
-//    {
-//        m_currentCardIndex = 0;
-//    }
-//}
+void Mtmchkin::incrementCardIndex()
+{
+    if (m_currentCardIndex < (int(m_cards.size()) - 1))
+    {
+        m_currentCardIndex ++;
+    }
+    else
+    {
+        m_currentCardIndex = 0;
+    }
+}
 
 void Mtmchkin::createDeck(const std::string &fileName)
 {
@@ -215,8 +224,8 @@ void Mtmchkin::createDeck(const std::string &fileName)
         countWordsAndRemoveDuplicateSpaces(trimmedString); ///omer 18.1: why to remove spaces? a line like: "Ma na" is legal? also what about newline? didn't understand. --> You are correct - I changed the code
 
         //If there is some newline, we simple move to the next line
-        if (trimmedString.empty()){}
-        else if (!cardStringValid(trimmedString))
+        ///if (trimmedString.empty()){} ///updated test63
+        if (!cardStringValid(trimmedString))
         {
             throw DeckFileFormatError(currentLineCount); ///omer 18.1: currentLineCount used here
         }
@@ -382,8 +391,9 @@ void Mtmchkin::checkUserInputLine(std::string& userLine,std::string& userName,st
     }
     int separatorIdx = int(lineCopy.find(' ')); //(lineCopy.find(' ')==std::string::npos) ? lineCopy.length() : lineCopy.find(' ');
     userName = std::string(lineCopy,0,separatorIdx);
-    if(numWords!=2) {
-        if(checkUserPlayerName(lineCopy)) {
+    if(numWords!=2) { ///updated test10
+        userClass = "NoClass";
+        if(checkUserPlayerName(lineCopy, userClass)) { ///updated test10
             throw InvalidUserPlayerClass();
         }
         else {
@@ -393,7 +403,7 @@ void Mtmchkin::checkUserInputLine(std::string& userLine,std::string& userName,st
     else {
         // int startOfClass = separatorIdx+1;
         userClass = std::string(lineCopy,++separatorIdx, std::string::npos);
-        if(!checkUserPlayerName(userName)) {
+        if(!checkUserPlayerName(userName,userClass)) { ///updated test10
             throw InvalidUserPlayerName();
         }
         else if (!checkUserPlayerClass(userClass)) {
@@ -436,7 +446,7 @@ void Mtmchkin::checkUserInputLine(std::string& userLine,std::string& userName,st
 // *//
 
 
-int Mtmchkin::checkUserPlayerName(const std::string& name) const
+int Mtmchkin::checkUserPlayerName(const std::string& name, const std::string& userClass) const
 {
     int len = int(name.length());
     if(len>15 || len < 1 || !playerStringValid(name)) {
@@ -444,11 +454,13 @@ int Mtmchkin::checkUserPlayerName(const std::string& name) const
     }
     for(const std::unique_ptr<Player>& player : m_players)
     {
-//        if(m_players[i] == nullptr) { //omer 18.1: if enters here - no more players in vector yet
-//            break;
-//        }
+ //        if(m_players[i] == nullptr) { //omer 18.1: if enters here - no more players in vector yet
+ //            break;
+ //        }
         if (name == player->getName()) {
-            return false;
+            if(userClass == "NoClass" || player->getJob() == userClass) { ///updated test10
+                return false;
+            }
         }
     }
     return true;

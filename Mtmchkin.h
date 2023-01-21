@@ -113,14 +113,14 @@ private:
     ///18.1 omer added:
     void enterValidUserPlayerLine();
     void createPlayer(const std::string& playerName, const std::string &playerClass);
-    int checkUserPlayerName(const std::string& name) const;
+    int checkUserPlayerName(const std::string& name, const std::string& userClass) const; ///updated test10
     int checkUserPlayerClass(const std::string& name) const;
     void checkUserInputLine(std::string& userLine,std::string& userName,std::string& userClass);
     //std::string removeStringDuplicateSpaces(const std::string& userLine);
     int takeNumOfPlayers();
 
     ///19.1 alex added:
-    //void incrementIndex();
+    void incrementCardIndex();
     void updateActivePlayers(const int &currentIndex);
 
 

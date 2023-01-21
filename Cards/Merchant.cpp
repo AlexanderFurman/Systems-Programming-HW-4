@@ -4,6 +4,7 @@
 
 #include "Card.h"
 #include "Merchant.h"
+#include <cassert>
 
 /*** static functions: ***/
 static bool checkSufficientMoney(const std::unique_ptr<Player>& curPlayer, int cost);
@@ -15,7 +16,7 @@ Merchant::Merchant() : Card("Merchant"){}
 
 //omer 16/1: how do we make sure if he has enough coins? specific func? exception?
 void Merchant::applyEncounter(const std::unique_ptr<Player>& curPlayer) const
-{
+{ ///updated test10
     printMerchantInitialMessageForInteractiveEncounter(std::cout,curPlayer->getName(),curPlayer->getCoins());
     int userNum = validateMerchantUserInput();
     if(userNum == ACTION_DO_NOTHING) {
@@ -32,11 +33,12 @@ void Merchant::applyEncounter(const std::unique_ptr<Player>& curPlayer) const
         else {
             curPlayer->buff(ADDED_FORCE);
         }
-        printMerchantSummary(std::cout,curPlayer->getName(),userNum, cost);
     }
     else { //not sufficient coins
+        cost = 0;
         printMerchantInsufficientCoins(std::cout);
     }
+    printMerchantSummary(std::cout,curPlayer->getName(),userNum, cost);
 }
 
 static bool checkSufficientMoney(const std::unique_ptr<Player>& player, int cost)
@@ -53,7 +55,13 @@ static int validateMerchantUserInput()
     while (true)
     {
         std::getline(std::cin,userInput);
-        userNum = std::stoi(userInput);
+        try { ///updated test10
+            userNum = std::stoi(userInput);
+        }
+        catch(...) {
+            printInvalidInput();
+            continue;
+        }
         if(userNum < Merchant::ACTION_DO_NOTHING || userNum > Merchant::ACTION_BUY_FORCE_BOOST)
         {
             printInvalidInput();

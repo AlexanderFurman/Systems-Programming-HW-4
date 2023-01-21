@@ -4,7 +4,7 @@
 
 #include "Player.h"
 #include "../utilities.h"
-#include "Exception.h"
+//#include "../Exception.h"
 
 Player::Player(const std::string& name) : m_name(name), m_level(NEW_PLAYER_LEVEL), m_force(NEW_PLAYER_FORCE),
                                           m_maxHP(MAX_HP), m_HP(MAX_HP), m_coins(NEW_PLAYER_COINS) {}

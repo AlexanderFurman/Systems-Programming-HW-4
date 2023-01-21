@@ -5,9 +5,10 @@
 #define EX4_Card_H
 
 #include <string>
+#include <memory>
 #include "../Players/Player.h"
 #include "../utilities.h"
-#include "Exception.h"
+#include "../Exception.h"
 
 ///*
 // *  CardType:
