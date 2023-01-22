@@ -12,9 +12,7 @@
 
 /**
  * omer 18.1 - general notes:
- * 1) static functions for internal mtmchkin.cpp use? (instead of methods)
- * 2) added functions as not private to Mtmchkin - forbidden. https://piazza.com/class/l8vdfbb5pf86qf/post/496
- * 3) charachters and strings by value? like: ' ' for space. is it ok? (i used it too)
+ * !!!) added functions as not private to Mtmchkin - forbidden. https://piazza.com/class/l8vdfbb5pf86qf/post/496
  * **/
 
 
@@ -37,27 +35,9 @@ Mtmchkin::Mtmchkin(const std::string &fileName): m_roundsPlayed(INITIAL_ROUNDS_P
     }
 }
 
-/// SHOULD THIS BE CAUGHT HERE OR SOMEWHERE ELSE? MAYBE IN MAIN? = for main later on.. :
-//try {
-//createDeck(fileName);
-//}
-//catch(const DeckFileNotFound& e) {
-//std::cout << e.what() << std::endl;
-////throw DeckFileNotFound();
-//}
-//catch(const DeckFileFormatError& e) {
-//std::cout << e.what() << std::endl;
-////throw DeckFileFormatError();
-//}
-//catch(const DeckFileInvalidSize& e) {
-//std::cout << e.what() << std::endl;
-////throw DeckFileInvalidSize();
-//}
-
 int Mtmchkin::takeNumOfPlayers()
 {
     printEnterTeamSizeMessage();
-    //char enteredSize[USER_TEAM_NUM_CHARS];
     std::string userStr;
     int userNum;
     while (true)
@@ -84,31 +64,6 @@ int Mtmchkin::takeNumOfPlayers()
 
 void Mtmchkin::playRound()
 {
-//    printRoundStartMessage(m_roundsPlayed+1);
-//    for (const std::shared_ptr<Player>& player : m_players)
-//    for (int i = 0; i < m_players.size(); i++)
-//    {
-//        std::shared_ptr<Player>& player = m_players.front();
-//        m_players.erase(m_players.begin());
-//        printTurnStartMessage(player->getName());
-//        m_cards[m_currentIndex]->applyEncounter(player.get()); /// There is an issue here since the function takes a pointer -- can it accept unique/shared ptrs?
-//        incrementIndex();
-//
-//        if (player->isPlaying())
-//        {
-//            m_players.push_back(player);
-//        }
-//        else if (player->won())
-//        {
-//            m_leaderBoard.addWinner(player.get());
-//        }
-//        else
-//        {
-//            m_leaderBoard.addLoser(player.get());
-//        }
-//
-//    }
-//    m_roundsPlayed++;
     printRoundStartMessage(m_roundsPlayed+1);
     for (int i = 0; i < int(m_players.size()); i++)
     {
@@ -204,47 +159,34 @@ void Mtmchkin::incrementCardIndex()
 
 void Mtmchkin::createDeck(const std::string &fileName)
 {
-    //Mode cardMode = card;
     std::ifstream file(fileName);
     std::string currentLine;
     int currentLineCount = 0;
-
-    //Check if file does not exist
-    if(file.fail())
+    if(file.fail()) //Check if file does not exist
     {
         throw DeckFileNotFound();
     }
-
-
-    // check if all strings are valid card names
-    while(std::getline(file, currentLine))
+    while(std::getline(file, currentLine))  // check if all strings are valid card names
     {
-        currentLineCount ++; ///omer 18.1: should it be in start? or end of func? (start from 1 or 0?) --> We start from line 1, no line 0 so I think it should be 1
+        currentLineCount ++;
         std::string trimmedString = currentLine;
-        countWordsAndRemoveDuplicateSpaces(trimmedString); ///omer 18.1: why to remove spaces? a line like: "Ma na" is legal? also what about newline? didn't understand. --> You are correct - I changed the code
+        countWordsAndRemoveDuplicateSpaces(trimmedString);
 
-        //If there is some newline, we simple move to the next line
-        ///if (trimmedString.empty()){} ///updated test63
         if (!cardStringValid(trimmedString))
         {
-            throw DeckFileFormatError(currentLineCount); ///omer 18.1: currentLineCount used here
+            throw DeckFileFormatError(currentLineCount);
         }
         else
         {
             createCard(trimmedString);
         }
     }
-
-    //Too few cards
-    if(m_cards.size() < MIN_CARDS_ALLOWED)
+    if(m_cards.size() < MIN_CARDS_ALLOWED)    //Too few cards
     {
         throw DeckFileInvalidSize();
     }
 }
 
-///omer 18.1 - check length<=15? --> you are right, I am changing the code
-///alex 19.1 - mode enum not necessary - I am removing it -- > should I add to check PlayerType is also valid here?
-//bool Mtmchkin::stringValid(const std::string &str, const enum Mode &mode)
 bool Mtmchkin::cardStringValid(const std::string &str) const
 {
     for(const std::string& card : cardTypes)
@@ -257,7 +199,6 @@ bool Mtmchkin::cardStringValid(const std::string &str) const
     return false;
 }
 
-
 bool Mtmchkin::playerStringValid(const std::string &str) const
 {
         for(const char &character : str)
@@ -266,14 +207,13 @@ bool Mtmchkin::playerStringValid(const std::string &str) const
             {
                 return false;
             }
-            if (str.length() > 15)
+            if (str.length() > USER_INPUT_MAX_LETTERS)
             {
                 return false;
             }
         }
         return true;
 }
-
 
 void Mtmchkin::createCard(const std::string &str)
 {
@@ -305,7 +245,7 @@ void Mtmchkin::createCard(const std::string &str)
     {
         m_cards.push_back(std::unique_ptr<Card>(new Treasure()));
     }
-    else //Merchant
+    else ///Merchant
     {
         m_cards.push_back(std::unique_ptr<Card>(new Merchant()));
     }
@@ -313,46 +253,21 @@ void Mtmchkin::createCard(const std::string &str)
 
 void Mtmchkin::createPlayer(const std::string& userName, const std::string &userClass)
 {
-    //std::string playerName = userName;
-    //std::string playerClass = userClass;
-    if(userClass==HEALER_STRING) { //Healer
+    if(userClass==HEALER_STRING)
+    {
         m_players.push_back(std::unique_ptr<Player>(new Healer(userName)));
     }
-    if(userClass==NINJA_STRING) { //Ninja
+    if(userClass==NINJA_STRING)
+    {
         m_players.push_back(std::unique_ptr<Player>(new Ninja(userName)));
     }
-    if(userClass==WARRIOR_STRING) { //Warrior
+    if(userClass==WARRIOR_STRING)
+    {
         m_players.push_back(std::unique_ptr<Player>(new Warrior(userName)));
     }
 }
 
-
-//void Mtmchkin::removeSpaces(std::string &str)
-//{
-////    for (int i = 0; i < str.length(); i++)
-////    {
-////        if (str[i] == ' ')
-////        {
-////            str.erase(i,1);
-////        }
-////    }
-//
-//    // removes white spaces at beginning and end of line
-//    while (str.length() > 0)
-//    {
-//        if(str[0] == ' ')
-//        {
-//            str.erase(0,1);
-//        }
-//        if(str[str.length()-1] == ' ')
-//        {
-//            str.erase(str.length()-1,1);
-//        }
-//    }
-//}
-
 /*** static functions implementations ***/
-//check if player exists: just name? or name+character?
 void Mtmchkin::enterValidUserPlayerLine()
 {
     printInsertPlayerMessage();
@@ -391,8 +306,8 @@ void Mtmchkin::checkUserInputLine(std::string& userLine,std::string& userName,st
     }
     int separatorIdx = int(lineCopy.find(' ')); //(lineCopy.find(' ')==std::string::npos) ? lineCopy.length() : lineCopy.find(' ');
     userName = std::string(lineCopy,0,separatorIdx);
-    if(numWords!=2) { ///updated test10
-        userClass = "NoClass";
+    if(numWords!=USER_INPUT_VALID_NUM_WORDS) { ///updated test10
+        userClass = NO_CLASS_STRING;
         if(checkUserPlayerName(lineCopy, userClass)) { ///updated test10
             throw InvalidUserPlayerClass();
         }
@@ -401,7 +316,6 @@ void Mtmchkin::checkUserInputLine(std::string& userLine,std::string& userName,st
         }
     }
     else {
-        // int startOfClass = separatorIdx+1;
         userClass = std::string(lineCopy,++separatorIdx, std::string::npos);
         if(!checkUserPlayerName(userName,userClass)) { ///updated test10
             throw InvalidUserPlayerName();
@@ -415,50 +329,16 @@ void Mtmchkin::checkUserInputLine(std::string& userLine,std::string& userName,st
 
 
 
-
-//* Additions removed from enterValidUserPlayerLine():
-//
-//        int numSpaces = std::count(lineCopy.begin(), lineCopy.end(), ' ');
-//        if (numSpaces==0) {
-//            printInvalidName();
-//            continue;
-//        }
-//        ///how to check strings? need to check if more then two words in the string!!
-//
-//
-//        int separatorIndex = lineCopy.find(' ');
-//        if(separatorIndex==std::string::npos)
-//        {
-//            try{
-//                checkUserPlayerName(lineCopy);
-//            }
-//        }
-//        std::string userName = std::string(lineCopy,0,separatorIndex-1);
-//        std::string userClass = std::string(lineCopy,separatorIndex, std::string::npos);
-//        if (!checkUserPlayerName(userName) || !checkUserPlayerClass(userClass))
-//        {
-//            continue;
-//        }
-//
-//
-//
-
-// *//
-
-
 int Mtmchkin::checkUserPlayerName(const std::string& name, const std::string& userClass) const
 {
     int len = int(name.length());
-    if(len>15 || len < 1 || !playerStringValid(name)) {
+    if(len>USER_INPUT_MAX_LETTERS || len < 1 || !playerStringValid(name)) {
         return false;
     }
     for(const std::unique_ptr<Player>& player : m_players)
     {
- //        if(m_players[i] == nullptr) { //omer 18.1: if enters here - no more players in vector yet
- //            break;
- //        }
         if (name == player->getName()) {
-            if(userClass == "NoClass" || player->getJob() == userClass) { ///updated test10
+            if(userClass == NO_CLASS_STRING || player->getJob() == userClass) { ///updated test10
                 return false;
             }
         }
@@ -466,23 +346,6 @@ int Mtmchkin::checkUserPlayerName(const std::string& name, const std::string& us
     return true;
 }
 
-//int Mtmchkin::checkUserPlayerName(const std::string& name)
-//{
-//    int len = name.length();
-//    if(len>15 || len < 1 || !(Mtmchkin::stringValid(name,player))) {
-//        return false;
-//    }
-//    for(int i = 0; i<m_players.size(); i++ )
-//    {
-//        if(m_players[i] == nullptr) { //omer 18.1: if enters here - no more players in vector yet
-//            break;
-//        }
-//        if (name == m_players[i]->getName()) {
-//            return false;
-//        }
-//    }
-//    return true;
-//}
 
 int Mtmchkin::checkUserPlayerClass(const std::string& name) const
 {
@@ -520,79 +383,6 @@ static int countWordsAndRemoveDuplicateSpaces(std::string &str) {
     }
     return wordCount;
 }
-
-
-//    i++;
-//    while (str[i] == ' ' )
-//    {
-//        str.erase(i,1);
-//    }
-//    while (str[i] != ' ')
-//    {
-//        i++;
-//    }
-//    while (str[i] == ' ' )
-//    {
-//        str.erase(i,1);
-//    }
-//    if (str[i]) { //if more then 2 words
-//        return false;
-//    }
-//    return true;
-//}
-//
-//static int checkNumWords(std::string &str)
-//{
-//    int i = 0;
-//    int wordCount = 0;
-//    while (str[i] == ' ' )
-//    {
-//        i++;
-//    }
-//
-//    while (str[i] != ' ')
-//    {
-//        i++;
-//    }
-//    i++;
-//    while (str[i] == ' ' )
-//    {
-//        str.erase(i,1);
-//    }
-//    while (str[i] != ' ')
-//    {
-//        i++;
-//    }
-//    while (str[i] == ' ' )
-//    {
-//        str.erase(i,1);
-//    }
-//}
-//
-//std::string takeFirstWordFromLine(std::string userLine)
-//{
-//    int i=0;
-//    while(userLine[i] == ' ')
-//    {
-//        userLine.erase(i,1);
-//    }
-//    while(userLine[i] != ' ')
-//    {
-//        userLine.erase(i,1);
-//    }
-//}
-
-
-
-////checkUserInputLine() explenation:
-////return string: valid input
-////return empty string: not valid without print
-////exceptions: not valid with print.
-//std::string Mtmchkin::checkUserInputLine(std::string &str)
-//{
-//
-//}
-
 
 
 

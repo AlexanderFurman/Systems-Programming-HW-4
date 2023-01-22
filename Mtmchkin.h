@@ -25,20 +25,26 @@ class Mtmchkin{
 public:
 
 
-
-
-//    enum CardType {Witch, Gremlin, Dragon, Mana, Barfight, Well, Treasure, Merchant};
-    
-    /*
+    /**
     * C'tor of Mtmchkin class
     *
     * @param filename - a file which contains the cards of the deck.
     * @return
     *      A new instance of Mtmchkin.
+    * @exceptions that may be thrown:
+        * std::bad_alloc - if an allocation of the game or of one of the cards/players was unsuccessful
+        * DeckFileNotFound() - if deck address leads to a non-existing file
+        * DeckFileFormatError() - if deck address leads to a bad-format file:
+             1) a line contains a non-exist card name
+             2) an empty line
+             3) a line contains a char not in: "a..z,A..Z"
+             4) a line contains more than 1 word
+           what() will include the bad line of the deck file.
+        * DeckFileInvalidSize() - if deck size < 5.
     */
     explicit Mtmchkin(const std::string &fileName);
     
-    /*
+    /**
     * Play the next Round of the game - according to the instruction in the exercise document.
     *
     * @return
@@ -46,7 +52,7 @@ public:
     */
     void playRound();
     
-    /*
+    /**
     * Prints the leaderBoard of the game at a given stage of the game - according to the instruction in the exercise document.
     *
     * @return
@@ -54,7 +60,7 @@ public:
     */
     void printLeaderBoard() const;
     
-    /*
+    /**
     *  Checks if the game ended:
     *
     *  @return
@@ -63,7 +69,7 @@ public:
     */
     bool isGameOver() const;
     
-	/*
+	/**
     *  Returns the number of rounds played.
     *
     *  @return
@@ -74,57 +80,48 @@ public:
 
 
 private:
+
     static const int INITIAL_ROUNDS_PLAYED = 0;
     static const int INITIAL_NUMBER_OF_PLAYERS = 0;
     static const int MIN_CARDS_ALLOWED = 5;
     static const int INITIAL_INDEX = 0;
-    ///omer 18.1: we can figure with ascii codes: if( (c>='a' && c<='z') || (c>='A' && c<='Z') )
-    const std::string permittedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    ///omer 18.1: static consts?
+    static const int USER_INPUT_MAX_LETTERS = 15;
+    static const int USER_INPUT_VALID_NUM_WORDS = 2;
+    static const int MIN_PLAYERS = 2;
+    static const int MAX_PLAYERS = 6;
+    enum Mode {player, card};
+
     const std::vector<std::string> playerTypes{"Healer", "Ninja", "Warrior"};
+    const std::vector<std::string> cardTypes{"Witch", "Gremlin", "Dragon", "Mana", "Barfight", "Well", "Treasure", "Merchant"};
+    const std::string permittedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const std::string HEALER_STRING = "Healer";
     const std::string NINJA_STRING = "Ninja";
     const std::string WARRIOR_STRING = "Warrior";
-    const std::vector<std::string> cardTypes{"Witch", "Gremlin", "Dragon", "Mana", "Barfight", "Well", "Treasure", "Merchant"};
-    enum Mode {player, card};
-    static const int USER_TEAM_NUM_CHARS = 1;
-    static const int MIN_PLAYERS = 2;
-    static const int MAX_PLAYERS = 6;
+    const std::string NO_CLASS_STRING = "NoClass";
 
     /** private members **/
-    //omer 18.1: how do we implement using queue? we can't push players out.
-    //omer 18.1: how do we implement curPlayer is pointer to player?.
-    std::vector<std::unique_ptr<Player>> m_players; ///omer 18.1: queue->vector, unique->shared --why does it need to be shared here? -- also, should be queue
+    std::vector<std::unique_ptr<Player>> m_players;
     std::vector<std::unique_ptr<Card>> m_cards;
     int m_roundsPlayed;
     int m_numberOfPlayers;
     int m_currentCardIndex;
-    //int m_currentPlayerIndex;
     std::vector<int> m_winners;
     std::vector<int> m_losers;
     std::vector<int> m_activePlayers;
 
-    //internal use functions
+
     void createDeck(const std::string &fileName); // check for all types of errors in the file, and throws them
     bool cardStringValid(const std::string &str) const;
     bool playerStringValid(const std::string &str) const;
     void createCard(const std::string &str);
-    //void removeSpaces(std::string &str);
-    ///18.1 omer added:
     void enterValidUserPlayerLine();
     void createPlayer(const std::string& playerName, const std::string &playerClass);
     int checkUserPlayerName(const std::string& name, const std::string& userClass) const; ///updated test10
     int checkUserPlayerClass(const std::string& name) const;
     void checkUserInputLine(std::string& userLine,std::string& userName,std::string& userClass);
-    //std::string removeStringDuplicateSpaces(const std::string& userLine);
     int takeNumOfPlayers();
-
-    ///19.1 alex added:
     void incrementCardIndex();
     void updateActivePlayers(const int &currentIndex);
-
-
-
 
 };
 
