@@ -13,7 +13,7 @@ class Ninja : public Player
 public:
 
     /**
-     * constructor of Healer class
+     * constructor of Ninja class
      * @param name - name of the player
      */
     explicit Ninja(const std::string& name);
@@ -25,8 +25,13 @@ public:
      */
     void addCoins(int addedCoins) override;
 
-    /************** DEFAULT/DELETED METHODS **************/
+    /**
+     * overides generic getJob function from Player -> returns string of player's job
+     * @param NONE
+     */
     std::string getJob() const override;
+
+    /************** DEFAULT/DELETED METHODS **************/
     ~Ninja() override = default;
 };
 

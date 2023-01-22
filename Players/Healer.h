@@ -27,6 +27,7 @@ public:
      * overides generic getJob function from Player -> returns string of player's job
      * @param NONE
      */
+
     std::string getJob() const override;
 
     /************** DEFAULT/DELETED METHODS **************/
