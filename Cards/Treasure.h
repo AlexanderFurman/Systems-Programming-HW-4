@@ -10,15 +10,30 @@
 class Treasure : public Card
 {
 public:
-    static const int TREASURE_COINS = 10;
+
+    /**
+     * Treasure non-arguments constructor.
+     */
     Treasure();
+
+    /**
+     * awards current Player with 10 coins.
+     * @param curPlayer - the current Player
+     */
     void applyEncounter(const std::unique_ptr<Player>& curPlayer) const override;
 
+    /**************** DEFAULT/DELETED METHODS ****************/
+
     ~Treasure() override = default;
-    Treasure(const Treasure&) = delete; ///???
-    Treasure& operator=(const Treasure& other) = delete; ///???
+    Treasure(const Treasure&) = delete;
+    Treasure& operator=(const Treasure& other) = delete;
+
+    /************************ MEMBERS ************************/
 
 private:
+
+    /** static members **/
+    static const int TREASURE_COINS = 10;
 
 };
 

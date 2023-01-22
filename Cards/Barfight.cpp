@@ -8,7 +8,6 @@
 
 Barfight::Barfight() : Card("Barfight") {}
 
-//omer 16.1: do we need to specifically address case of dead player?
 void Barfight::applyEncounter(const std::unique_ptr<Player>& curPlayer) const
 {
     bool isWarrior =  dynamic_cast<const Warrior*>(curPlayer.get()) != nullptr;
@@ -18,7 +17,3 @@ void Barfight::applyEncounter(const std::unique_ptr<Player>& curPlayer) const
     printBarfightMessage(isWarrior);
 }
 
-//std::ostream& Card::virtualPrintCard(std::ostream& os) const
-//{
-//    printCardDetails(os,m_name);
-//}

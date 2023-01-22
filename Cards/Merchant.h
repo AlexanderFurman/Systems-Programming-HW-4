@@ -11,6 +11,31 @@
 class Merchant : public Card {
 
 public:
+
+    /**
+     * Merchant non-arguments constructor.
+     */
+    Merchant();
+
+    /**
+     * applies merchant encounter with current Player, as described in Mtmchkin instructions.
+     * @param curPlayer - the current Player
+     */
+    void applyEncounter(const std::unique_ptr<Player>& curPlayer) const override;
+
+
+    /**************** DEFAULT/DELETED METHODS ****************/
+
+    ~Merchant() override = default;
+    Merchant(const Merchant&) = delete;
+    Merchant& operator=(const Merchant& other) = delete;
+
+    /************************ MEMBERS ************************/
+
+
+private:
+
+    /** static members **/
     static const int ACTION_DO_NOTHING = 0;
     static const int ACTION_BUY_HP_POTION = 1;
     static const int ACTION_BUY_FORCE_BOOST = 2;
@@ -21,23 +46,7 @@ public:
     static const int ADDED_HP = 1;
     static const int ADDED_FORCE = 1;
 
-
-    static const int USER_INPUT_SIZE = 1;
-
-    Merchant();
-    void applyEncounter(const std::unique_ptr<Player>& curPlayer) const override;
-
-    ~Merchant() override = default;
-    Merchant(const Merchant&) = delete; ///???
-    Merchant& operator=(const Merchant& other) = delete; ///???
-private:
-
 };
-
-//omer 16/1: checkSufficientMoney is static
-//bool checkSufficientMoney(const Player&, int cost) const;
-
-
 
 
 

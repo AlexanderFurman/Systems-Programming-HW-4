@@ -10,16 +10,34 @@
 class Well : public Card{
 
 public:
-    static const int WELL_LOSE_HP = 10;
 
+    /************************ METHODS ************************/
+
+    /**
+     * Well non-arguments constructor.
+     */
     Well();
+
+    /**
+     * taking 10 HP from current Player, unless current Player is of class Ninja.
+     * @param curPlayer - the current Player
+     */
     void applyEncounter(const std::unique_ptr<Player>& curPlayer) const override;
 
+
+    /**************** DEFAULT/DELETED METHODS ****************/
+
     ~Well() override = default;
-    Well(const Well&) = delete; ///???
-    Well& operator=(const Well& other) = delete; ///???
+    Well(const Well&) = delete;
+    Well& operator=(const Well& other) = delete;
+
+    /************************ MEMBERS ************************/
+
+    /** static members **/
 
 private:
+
+    static const int WELL_LOSE_HP = 10;
 
 };
 

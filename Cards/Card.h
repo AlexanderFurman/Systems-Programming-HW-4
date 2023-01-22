@@ -10,7 +10,7 @@
 #include "../utilities.h"
 #include "../Exception.h"
 
-///*
+//*
 // *  CardType:
 // *  Each card has a type:
 // *  Gremlin, Witch, Dragon - Battle against a monster.
@@ -19,16 +19,14 @@
 // *  Well - current player loses 10 HP unless he's a Ninja.
 // *  Barfight - current player loses 10 HP unless he's a Warrior.
 // *  Mana - if current player is a Healer, Increase HP by 10 points - which means 20 for Healer (no more than maxHP points).
-//*/
-//enum class AllowedCards {Gremlin, Witch, Dragon, Merchant, Treasure, Well, Barfight, Mana}; // The type of the Card
+// */
 
 class Card {
 public:
 
+    /************ METHODS ************/
 
-//    virtual const std::string& getName() const = 0;
-
-    /*
+    /**
      * Handling the player's applyEncounter with the card:
      *
      * @param curPlayer - The current player.
@@ -37,46 +35,42 @@ public:
     */
     virtual void applyEncounter(const std::unique_ptr<Player>& curPlayer) const = 0; ///omer 16.1: const method?
 
+
+    /**
+     * adds added details of a class inheriting Card.
+     * @param os - std::ostream type stream written to by the function.
+     */
     virtual void virtualPrintAddedDetails(std::ostream& os) const;
 
+    /**
+     *
+     * @param os - std::ostream type stream written to by the operator.
+     * @param card - the card who's details are written to stream
+     * @return - std::ostream type stream with the added card details.
+     */
     friend std::ostream& operator<<(std::ostream& os, const Card& card);
 
 
-//    /*
-//     * Prints the card info:
-//     *
-//     * @return
-//     *      void
-//    */
-//    void printInfo() const;
+    /************ DEFAULT/DELETED METHODS ************/
 
-
-//    /*
-//     * C'tor to the "default card" - Treasure card that gives 0 coins
-//    */
-//    Card(): m_effect(CardType::Treasure), m_stats() {}
-
-
-    /*
-     * default / deleted
-    */
-    ///omer 14/1: need for exception handling?
     virtual ~Card() = default;
-    Card(const Card&) = delete; ///???
-    Card& operator=(const Card& other) = delete; ///???
+    Card(const Card&) = delete;
+    Card& operator=(const Card& other) = delete;
 
 protected:
-    /*
- * C'tor of Card class
- *
- * @param name - The name of the card.
- * @return
- *      A new instance of Card.
-*/
-    explicit Card(const std::string& name);
-    std::string m_name;
 
-private:
+    /**
+     * C'tor of Card class (abstract class - will be inherited by specific type cards)
+     *
+     * @param name - The name of the card.
+     * @return - A new instance of Card.
+    */
+    explicit Card(const std::string& name);
+
+
+    /************ MEMBERS ************/
+
+    std::string m_name;
 
 };
 

@@ -6,7 +6,7 @@
 #include "Merchant.h"
 #include <cassert>
 
-/*** static functions: ***/
+/*** static functions signatures: ***/
 static bool checkSufficientMoney(const std::unique_ptr<Player>& curPlayer, int cost);
 static int validateMerchantUserInput();
 
@@ -71,29 +71,4 @@ static int validateMerchantUserInput()
     }
 }
 
-//validateMerchantUserInput alternative with try and catch:
-/*
-static int validateMerchantUserInput()
-{
-    bool validInputFlag = false;
-    char userInput[Merchant::USER_INPUT_SIZE];
-    int userNum = -1;
-    while (validInputFlag == false)
-    {
-        try{
-            std::cin.getline(userInput,sizeof(userInput));
-            userNum = std::stoi(userInput);
-            if(userNum<Merchant::ACTION_DO_NOTHING || userNum>Merchant::ACTION_BUY_FORCE_BOOST)
-            {
-                throw InvalidMerchantInput();
-            }
-        }
-        catch(...)
-        {
-            printInvalidInput();
-            continue;
-        }
-        validInputFlag= true;
-    }
-}
- * */
+
