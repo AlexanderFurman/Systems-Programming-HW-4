@@ -6,25 +6,34 @@
 
 #include "Player.h"
 
+/// child class derived from Player
 class Healer : public Player
 {
 public:
-    explicit Healer(const std::string& name); //: Player(name){}
 
+    /**
+     * constructor of Healer class
+     * @param name - name of the player
+     */
+    explicit Healer(const std::string& name);
+
+    /**
+     * overides generic heal function from Player -> adds addedHP to the player twice, so long as total HP not over max.
+     * @param addedHP - HP to be added to player
+     */
     void heal(int addedHP) override;
-//    {
-////        if(addedHP<=0) {
-////            return;
-////        }
-//        m_HP = (m_HP+ DOUBLE*addedHP>=m_maxHP) ? m_maxHP : m_HP+ DOUBLE*addedHP;
-//    }
+
+    /**
+     * overides generic getJob function from Player
+     * @param NONE
+     * @returns  string of player's job
+     */
 
     std::string getJob() const override;
+
+    /************** DEFAULT/DELETED METHODS **************/
     ~Healer() override = default;
 
-//    {
-//        return "Healer";
-//    }
 };
 
 

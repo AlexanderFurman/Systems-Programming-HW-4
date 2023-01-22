@@ -6,15 +6,13 @@
 #define HW3_CLION_PLAYER_H
 
 #include <string>
-
 #include <iostream>
-
-
-
 
 class Player
 {
 public:
+
+    /// static integer values to be used in constructors + functions
     static const int MAX_HP = 100;
     static const int MAX_LEVEL = 10;
     static const int NEW_PLAYER_LEVEL = 1;
@@ -22,7 +20,10 @@ public:
     static const int NEW_PLAYER_COINS = 10;
     static const int DOUBLE = 2;
 
-
+    /**
+     * constructor of Player class
+     * @param name - name of the player
+     */
     explicit Player(const std::string& name); ///should it be string& or by value?
 //            m_name(name), m_level(NEW_PLAYER_LEVEL), m_force(NEW_PLAYER_FORCE),
 //            m_maxHP(MAX_HP), m_HP(MAX_HP), m_coins(NEW_PLAYER_COINS) {}
@@ -32,104 +33,124 @@ public:
 
     /*** setters and getters: ***/
 
+    /**
+     * @param NONE
+     * @returns  int of attack strength of player
+     */
     virtual int getAttackStrength() const;
-//    {
-//        return m_force+m_level;
-//    }
-    const std::string& getName() const;
-//    {
-//        return m_name; // This should return *char instead of std__string, in order to match with the method printPlayerInfo
-//    }
-    int getLevel() const ;// required
-//    {
-//        return m_level;
-//    }
-    int getForce() const;
-//    {
-//        return m_force;
-//    }
 
+    /**
+     * @param NONE
+     * @returns  string of name of player
+     */
+    const std::string& getName() const;
+
+
+    /**
+     * @param NONE
+     * @returns  level of player
+     */
+    int getLevel() const ;
+
+    /**
+     * @param NONE
+     * @returns  force of player
+     */
+    int getForce() const;
+
+    /**
+     * @param NONE
+     * @returns  HP of player
+     */
     int getHP() const;
-//    {
-//        return m_HP;
-//    }
+
+    /**
+     * @param NONE
+     * @returns  number of coins of player
+     */
     int getCoins() const;
-//    {
-//        return m_coins;
-//    }
 
     /*** other required methods ***/
     /// if methods get neg/wrong value treat as got 0
+
+    /**
+     * @param deductedHP - the number of points to remove from player's HP - so long as non-negative HP remains
+     */
     void damage(int deductedHP);
-//    {
-//        if(deductedHP<=0) {
-//            return;
-//        }
-//        m_HP = (m_HP-deductedHP<0) ? 0 : m_HP-deductedHP;
-//    }
+
+    /**
+     * increases the player's level, so long as less than max level
+     * @param None
+     */
     void levelUp();
-//    {
-//        if(m_level < MAX_LEVEL) {
-//            m_level++;
-//        }
-//    }
+
+    /**
+     * returns if player has lost the game
+     * @param None
+     */
     bool isKnockedOut() const;
-//    {
-//        return (m_HP==0);
-//    }
+
+    /**
+     * returns if player has won the game
+     * @param None
+     */
     bool won() const;
-//    {
-//        return getLevel() == MAX_LEVEL;
-//    }
-    bool pay(int deductedCoins); ///if false - not committing payment.
-//    {
-//        if(deductedCoins<=0) { //piazza @205
-//            return true;
-//        }
-//        if(m_coins-deductedCoins<0) { // doesn't have enough coins
-//            return false;
-//        }
-//        m_coins = m_coins-deductedCoins; // has enough coins
-//        return true;
-//    }
 
+    /**
+     * deducts from player's coins
+     * @param deductedCoins - number of coins to remove
+     * @returns  bool - if false, no payment occured
+     */
+    bool pay(int deductedCoins);
+
+    /**
+     * adds to player's coins
+     * @param addedCoins - number of coins to add
+     */
     virtual void addCoins(int addedCoins);
-//    {
-//        m_coins += (addedCoins<=0) ? 0 : addedCoins;
-//    }
+
+    /**
+     * adds to player's force
+     * @param forceIncrease - number of points to add to force
+     */
     virtual void buff(int forceIncrease);
-//    {
-//        if(forceIncrease > 0) {
-//            m_force += forceIncrease;
-//        }
-//    }
-    virtual void heal(int addedHP); ///increase HP by addedHP with. total max value of maxHP.
-//    {
-//        if(addedHP<=0) {
-//            return;
-//        }
-//        m_HP = (m_HP+addedHP>=m_maxHP) ? m_maxHP : m_HP+addedHP;
-//    }
+
+    /**
+     * adds to player's HP
+     * @param addedHP - number of points to add to player's HP, added until max HP reached
+     */
+    virtual void heal(int addedHP);
+
+    /**
+     * decreases player's force by 1, unless force is already at minimum
+     * @param NONE
+     */
     void decForce(); ///added by omer - 16.1
-//    {
-//        if(m_force>0) {
-//            m_force--;
-//        }
-//    }
 
+    /**
+     * @param NONE
+     * @returns bool - if player has not won, and also has not lost
+     */
     bool isPlaying() const;
-//    {
-//        return (!won() && !isKnockedOut());
-//    }
 
+    /**
+     * pure virtual method which must be overridden
+     * @param NONE
+     * @returns  string of player's job
+     */
     virtual std::string getJob() const = 0; //purely virtual
 
+    /**
+     * overides << method, used for printing player information
+     * @param os - the stream to which the string will be printed to
+     * @param player - the player whose details will be printed
+     * @returns  os - the stream which contains the message of the player
+     */
     friend std::ostream& operator<<(std::ostream & os, const Player& player);
 
 
-//private:
 protected:
-    std::string m_name; ///english letters (Aa), no spaces.
+    std::string m_name; ///english letters (Aa), no spaces, less than 15 chars
     int m_level; /// int in range 1..10
     int m_force; /// int >= 0
     int m_maxHP; /// int > 0
@@ -137,13 +158,5 @@ protected:
     int m_coins; /// int >= 0
 
 };
-
-//
-//std::ostream& operator<<(std::ostream& os, const Player& player)
-//{
-//    printPlayerDetails(os,player.getName(),player.getJob(),
-//                       player.getLevel(), player.getForce(), player.getHP(), player.getCoins());
-//    return os;
-//}
 
 #endif //HW3_CLION_PLAYER_H

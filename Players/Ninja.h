@@ -7,24 +7,32 @@
 
 #include "Player.h"
 
+/// child class derived from Player
 class Ninja : public Player
 {
 public:
-    explicit Ninja(const std::string& name); //: Player(name) {}
 
+    /**
+     * constructor of Ninja class
+     * @param name - name of the player
+     */
+    explicit Ninja(const std::string& name);
+
+    /**
+     * overides generic addCoins function from Player -> adds addedCoins to the player twice
+     * @param addedCoins - coins to be added to player
+     */
     void addCoins(int addedCoins) override;
-//    {
-//        m_coins += DOUBLE*addedCoins;
-////        m_coins += (addedCoins<=0) ? 0 : 2*addedCoins;
-//    }
 
+    /**
+     * overides generic getJob function from Player
+     * @param NONE
+     * @returns  string of player's job
+     */
     std::string getJob() const override;
+
+    /************** DEFAULT/DELETED METHODS **************/
     ~Ninja() override = default;
-
-//    {
-//        return "Ninja";
-//    }
-
 };
 
 #endif //HW3_CLION_NINJA_H
