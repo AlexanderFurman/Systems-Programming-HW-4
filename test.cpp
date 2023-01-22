@@ -120,7 +120,7 @@ void run_test(std::function<bool()> test, std::string test_name)
 
 bool cardsPrintsTest()
 {
-    
+
     Barfight junta;
     Dragon mushu;
     Mana mana;
@@ -129,7 +129,7 @@ bool cardsPrintsTest()
     Well well;
     Treasure factor;
     Witch witch;
-    cout << junta << std::endl << mushu << std::endl << mana   
+    cout << junta << std::endl << mushu << std::endl << mana
                     << std::endl << gremlin  << std::endl << pizzaHut
                     << std::endl << well  << std::endl << factor
                     << std::endl << witch;
@@ -138,11 +138,11 @@ bool cardsPrintsTest()
 
 bool playersPrintsTest()
 {
-    
+
     Ninja player1("Itay");
     Warrior player2("Efrat");
     Healer player3("Jimmy");
-    cout << player1 << std::endl << player2 << std::endl << player3   
+    cout << player1 << std::endl << player2 << std::endl << player3
                     << std::endl;
     return true;
 }
@@ -337,7 +337,7 @@ bool badFormatStartTest()
 // --------------------------------       Main function          ------------------------------
 
 int main(){
-    
+
 	run_test(cardsPrintsTest,"cardsPrintsTest");
 	run_test(playersPrintsTest,"playersPrintsTest");
 	run_test(testCard,"Deck creation test");

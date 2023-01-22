@@ -42,4 +42,5 @@ add_executable(HW4
         Mtmchkin.cpp
         Mtmchkin.h
         test.cpp
+        main.cpp
         )

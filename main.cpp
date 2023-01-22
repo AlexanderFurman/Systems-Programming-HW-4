@@ -3,8 +3,8 @@
 //
 
 #include <iostream>
-#include "Mtmchkin.h"
-#include "Exception.h"
+#include "../Mtmchkin.h"
+#include <exception>
 
 int main()
 {
@@ -19,7 +19,7 @@ int main()
         }
         game.printLeaderBoard();
     }
-    catch (std::exception e)
+    catch (const std::exception& e)
     {
         std::cout << e.what();
     }
