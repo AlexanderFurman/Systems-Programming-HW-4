@@ -33,13 +33,14 @@ public:
     /************************ MEMBERS ************************/
 
 
-private:
+/** static members **/
 
-    /** static members **/
+public:
     static const int ACTION_DO_NOTHING = 0;
     static const int ACTION_BUY_HP_POTION = 1;
     static const int ACTION_BUY_FORCE_BOOST = 2;
 
+private:
     static const int COST_HP = 5;
     static const int COST_FORCE_BOOST = 10;
 
