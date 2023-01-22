@@ -20,15 +20,17 @@ public:
 
 
     /**
-     * overides generic getAttackStrength function from Player -> changes attack strength calculation to have
+     * overides generic getAttackStrength function from Player ->
      * double the force.
      * @param NONE
+     * @returns int of attack strength of player
      */
     int getAttackStrength() const override;
 
     /**
-     * overides generic getJob function from Player -> returns string of player's job
+     * overides generic getJob function from Player
      * @param NONE
+     * @returns  string of player's job
      */
     std::string getJob() const override;
 

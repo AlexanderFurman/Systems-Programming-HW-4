@@ -19,15 +19,15 @@ public:
     explicit Ninja(const std::string& name);
 
     /**
-     * overides generic addCoins function from Player -> adds addedCoins to the player twice,
-     * so long as total coins not over max.
+     * overides generic addCoins function from Player -> adds addedCoins to the player twice
      * @param addedCoins - coins to be added to player
      */
     void addCoins(int addedCoins) override;
 
     /**
-     * overides generic getJob function from Player -> returns string of player's job
+     * overides generic getJob function from Player
      * @param NONE
+     * @returns  string of player's job
      */
     std::string getJob() const override;
 
