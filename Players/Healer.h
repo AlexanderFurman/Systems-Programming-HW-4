@@ -23,7 +23,10 @@ public:
      */
     void heal(int addedHP) override;
 
-    ///returns string
+    /**
+     * overides generic getJob function from Player -> returns string of player's job
+     * @param NONE
+     */
     std::string getJob() const override;
 
     /************** DEFAULT/DELETED METHODS **************/
