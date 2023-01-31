@@ -39,4 +39,5 @@ The terminal will prompt for the number of users (2-6) and their names and playe
 ```
 
 ```<name>``` - any english name, no spaces, 15 characters or under.
+
 ```<player-type>``` - players may choose ```Ninja```, ```Warrior```, or ```Healer```. These player-types all have their own advantages during the game.
