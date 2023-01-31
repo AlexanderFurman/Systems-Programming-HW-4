@@ -14,12 +14,13 @@ use of abstract classes and virtual functions.
 This project implements a card game similar to Munchkin, that combines elements of role-playing games with traditional card game mechanics. Players take on the role of characters that try to level up and defeat monsters. 
 
 ## Implementation Includes
-*classes
-*inheritance
-*unique and shared pointers
-*exception handling
-*abstract classes
-*virtual functions.
+
+- Classes
+- Inheritance
+- Unique and Shared Pointers
+- Exception Handling
+- Abstract Classes
+- Virtual Functions
 
 ## Usage
 Start by compiling the code by running the following in the terminal:
