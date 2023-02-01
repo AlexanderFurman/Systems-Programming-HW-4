@@ -33,7 +33,7 @@ To begin the game, run the following:
 ```bash
 ./mtmchkin
 ```
-The terminal will prompt for the number of users (2-6) and their names and player-type. This should be entered as follows:
+The terminal will prompt for the number of users (2-6). After this is entered, the terminal will also ask for the players' names and player-types. This should be entered for each player as follows:
 ```bash
 <name> <player-type>
 ```
